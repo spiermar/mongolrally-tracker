@@ -2,8 +2,7 @@ var sficon = 'images/finishflag.png';	// start finish icon
 var blogicon = 'images/blogmarker.png';	// blog icon
 var vicon = 'images/videomarker.png';	// video icon
 var imgicon = 'images/imgmarker.png';	// image icon
-var charity1icon = 'images/imgmac.png';		// Charity 1 icon
-var charity2icon = 'images/imgcoea.png';	// Charity 2 icon
+var charityicon = 'images/imgmac.png';		// Charity 1 icon
 var caricon = 'images/car.png';	// Charity 2 icon
 
 stateimg = false;
@@ -17,42 +16,8 @@ imgpts = new Object();
 charitypts = new Object();
 
 
-//object to hold all the info about a pinned photo;
-function pinnedPhoto (marker, id, title, desc, resource)
-{
-	this.marker = marker;
-	this.id = id;
-	this.pttitle = title;
-	this.ptdesc = desc;
-	this.ptresource = resource;
-	return this;
-}
-
-//object to hold all the info about a pinned video;
-function pinnedVideo (marker, id, title, desc, resource)
-{
-	this.marker = marker;
-	this.id = id;
-	this.pttitle = title;
-	this.ptdesc = desc;
-	this.ptresource = resource;
-	return this;
-}
-
-//object to hold all the info about a pinned photo;
-function pinnedCharity (marker, id, title, desc, resource, charity)
-{
-	this.marker = marker;
-	this.id = id;
-	this.pttitle = title;
-	this.ptdesc = desc;
-	this.ptresource = resource;
-	this.charity = charity;
-	return this;
-}
-
-//object to hold all the info about a pinned blog;
-function pinnedBlog (marker, id, title, desc, resource)
+//object to hold all the info about a pin;
+function pin (marker, id, title, desc, resource)
 {
 	this.marker = marker;
 	this.id = id;
@@ -600,7 +565,7 @@ function addImgPt(imgloc, imgid, imgtitle, imgdesc, imgresource){
 				zIndex: 5,
 				visible: false
 			});
-			var imgptplus = new pinnedPhoto(imgpt, imgid, imgtitle, imgdesc, imgresource);
+			var imgptplus = new pin(imgpt, imgid, imgtitle, imgdesc, imgresource);
 			imgpts[imgid] = imgptplus;
 			new google.maps.event.addListener(imgptplus.marker, 'click', function() {
 				showImgInfo(imgid);
@@ -617,7 +582,7 @@ function addBlogPt(blogloc, blogid, blogtitle, blogdesc, blogresource){
 				zIndex: 4,
 				visible: false
 			});
-			var blogptplus = new pinnedBlog(blogpt, blogid, blogtitle, blogdesc, blogresource);
+			var blogptplus = new pin(blogpt, blogid, blogtitle, blogdesc, blogresource);
 			blogpts[blogid] = blogptplus;
 			new google.maps.event.addListener(blogptplus.marker, 'click', function() {
 				showBlogInfo(blogid);
@@ -625,12 +590,6 @@ function addBlogPt(blogloc, blogid, blogtitle, blogdesc, blogresource){
 }
 
 function addCharityPt(charityloc, charityid, charitytitle, charitydesc, charityresource, charity){
-	if (charity == 1){
-		charityiconpt = charity1icon;
-	}
-	else {
-		charityiconpt = charity2icon;
-	}
 	charitypt = new google.maps.Marker({
 				position: charityloc,
 				map: map,
@@ -640,7 +599,7 @@ function addCharityPt(charityloc, charityid, charitytitle, charitydesc, charityr
 				zIndex: 4,
 				visible: false
 			});
-			var charityptplus = new pinnedCharity(charitypt, charityid, charitytitle, charitydesc, charityresource, charity);
+			var charityptplus = new pin(charitypt, charityid, charitytitle, charitydesc, charityresource);
 			charitypts[charityid] = charityptplus;
 			new google.maps.event.addListener(charityptplus.marker, 'click', function() {
 				showCharityInfo(charityid);
@@ -657,7 +616,7 @@ function addVideoPt(vidloc, vidid, vidtitle, viddesc, vidresource){
 				zIndex: 4,
 				visible: false
 			});
-			var videoptplus = new pinnedVideo(videopt, vidid, vidtitle, viddesc, vidresource);
+			var videoptplus = new pin(videopt, vidid, vidtitle, viddesc, vidresource);
 			vpts[vidid] = videoptplus;
 			new google.maps.event.addListener(videoptplus.marker, 'click', function() {
 				showVidInfo(vidid);
