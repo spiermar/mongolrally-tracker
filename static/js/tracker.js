@@ -19,12 +19,48 @@ charitypts = new Object();
 //object to hold all the info about a pin;
 function pin (marker, id, title, desc, resource)
 {
-this.marker = marker;
-this.id = id;
-this.pttitle = title;
-this.ptdesc = desc;
-this.ptresource = resource;
-return this; 
+	this.marker = marker;
+	this.id = id;
+	this.pttitle = title;
+	this.ptdesc = desc;
+	this.ptresource = resource;
+	return this;
+}
+
+/**
+* The MapControl adds a control to the map that recenters the map on Chicago.
+* This constructor takes the control DIV as an argument.
+* @constructor
+*/
+function MapControl(controlDiv, map, title, text, callback) {
+
+	// Set CSS for the control border
+	var controlUI = document.createElement('div');
+	controlUI.style.backgroundColor = '#fff';
+	controlUI.style.border = '2px solid #fff';
+	controlUI.style.borderRadius = '3px';
+	controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+	controlUI.style.cursor = 'pointer';
+	controlUI.style.marginBottom = '22px';
+	controlUI.style.textAlign = 'center';
+	controlUI.title = title;
+	controlDiv.appendChild(controlUI);
+
+	// Set CSS for the control interior
+	var controlText = document.createElement('div');
+	controlText.style.color = 'rgb(25,25,25)';
+	controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+	controlText.style.fontSize = '16px';
+	controlText.style.lineHeight = '38px';
+	controlText.style.paddingLeft = '5px';
+	controlText.style.paddingRight = '5px';
+	controlText.innerHTML = text;
+	controlUI.appendChild(controlText);
+
+	// Setup the click event listeners: simply set the map to
+	// Chicago
+	google.maps.event.addDomListener(controlUI, 'click', callback);
+
 }
 
 function initialize() {
@@ -37,20 +73,15 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-	//load the spreadsheet data        
+	//load the spreadsheet data
 	getJsonPoints();
-	
-	var homeControlDiv = document.createElement('div');
-	var homeControl = new mapcontrols(homeControlDiv);
-	var bannerControlDiv = document.createElement('div');
-	var bannerControl = new bannercontrolpanel(bannerControlDiv);
-	
-	bannerControlDiv.index = 1;
-	homeControlDiv.index = 1;
-	map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(homeControlDiv);
-	map.controls[google.maps.ControlPosition.TOP_CENTER].push(bannerControlDiv);
-	
-	google.maps.event.addDomListener(window, 'load', initialize);
+
+	var blogControlDiv = document.createElement('div');
+	var blogControl = new CenterControl(blogControlDiv, map, "", "", function () {
+		toggleblogvis();
+	});
+	blogControlDiv.index = 1;
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(blogControlDiv);
 }
 
 function mapcontrols(controlDiv) {
@@ -83,11 +114,11 @@ function mapcontrols(controlDiv) {
 		blogText.innerHTML = '<strong>Show/Hide Blogs</strong>';
 	}
 	blogUI.appendChild(blogText);
-	
+
 	google.maps.event.addDomListener(blogUI, 'click', function() {
 		toggleblogvis();
 	});
-	
+
 	// Set CSS for the control border.
 	var videoUI = document.createElement('div');
 	if (width > 1000){
@@ -112,11 +143,11 @@ function mapcontrols(controlDiv) {
 		videoText.innerHTML = '<strong>Show/Hide Videos</strong>';
 	}
 	videoUI.appendChild(videoText);
-	
+
 	google.maps.event.addDomListener(videoUI, 'click', function() {
 		togglevidvis();
 	});
-	
+
 	// Set CSS for the control border.
 	var imgUI = document.createElement('div');
 	if (width > 1000){
@@ -141,7 +172,7 @@ function mapcontrols(controlDiv) {
 		imgText.innerHTML = '<strong>Show/Hide Photos</strong>';
 	}
 	imgUI.appendChild(imgText);
-	
+
 	google.maps.event.addDomListener(imgUI, 'click', function() {
 		toggleimgvis();
 	});
@@ -170,11 +201,11 @@ function mapcontrols(controlDiv) {
 		charityText.innerHTML = '<strong>Show/Hide Good Stuff</strong>';
 	}
 	charityUI.appendChild(charityText);
-	
+
 	google.maps.event.addDomListener(charityUI, 'click', function() {
 		togglecharityvis();
 	});
-	
+
 	// Set CSS for the control border.
 	var vgivingUI = document.createElement('div');
 //	vgivingUI.style.backgroundColor = 'white';
@@ -197,7 +228,7 @@ function mapcontrols(controlDiv) {
 		vgivingText.innerHTML = '<br><img src="images/vgiving.png" width="149" height="62">';
 	}
 	vgivingUI.appendChild(vgivingText);
-	
+
 	google.maps.event.addDomListener(vgivingUI, 'click', function() {
 		window.open('http://uk.virginmoneygiving.com/fundraiser-web/fundraiser/showFundraiserProfilePage.action?userUrl=gingerbreadrally', '_blank');
 	});
@@ -209,7 +240,7 @@ function bannercontrolpanel(controlDiv) {
 
 	var width = window.innerWidth;
 	var height = window.innerHeight;
-	
+
 	// Set CSS for the control border.
 	var logoUI = document.createElement('div');
 //	logoUI.style.backgroundColor = 'white';
@@ -219,11 +250,11 @@ function bannercontrolpanel(controlDiv) {
 	logoUI.style.textAlign = 'center';
 	logoUI.title = 'Gingerbread Logo';
 	controlDiv.appendChild(logoUI);
-	
+
 	var imgw = screen.width * 0.3;
 	var ratio = imgw / 432;
 	var imgh = 100 * ratio;
-	
+
 	// Set CSS for the control interior.
 	var logoText = document.createElement('div');
 	logoText.style.fontFamily = 'Arial,sans-serif';
@@ -232,7 +263,7 @@ function bannercontrolpanel(controlDiv) {
 	logoText.style.paddingRight = '4px';
 	logoText.innerHTML = '<img src="images/Orange2.png" width="' + imgw + '" height="' + imgh + '">'; //432 x 100
 	logoUI.appendChild(logoText);
-	
+
 	google.maps.event.addDomListener(logoUI, 'click', function() {
 		window.open('http://thegingerbreadmen.wix.com/rally', '_blank');
 	});
@@ -333,7 +364,7 @@ function showImgInfo(imgno)
 	var infowindow = new google.maps.InfoWindow({
 		content: html
 	});
-	
+
 	infowindow.open(map, pin.marker)
 }
 
@@ -366,7 +397,7 @@ function showVidInfo(vidno)
 	var infowindow = new google.maps.InfoWindow({
 		content: html
 	});
-	
+
 	infowindow.open(map, pin.marker)
 }
 
@@ -397,7 +428,7 @@ function showBlogInfo(blogno)
 	var infowindow = new google.maps.InfoWindow({
 		content: html
 	});
-	
+
 	infowindow.open(map, bpin.marker)
 }
 
@@ -437,20 +468,20 @@ function showCharityInfo(charno)
 	var infowindow = new google.maps.InfoWindow({
 		content: html
 	});
-	
+
 	infowindow.open(map, cpin.marker)
 }
 
 function loadJsonPoints(json) {
 
 	var finalpt;
-	
+
 	linepoints = new Array();
 	linepointsback = new Array();
 	for (var i = 0; i < json.data.length; i++) {
 
 		var entry = json.data[i];
-		
+
 		//get lat/lon
 		var e = NaN;
 		var n = NaN;
@@ -461,10 +492,10 @@ function loadJsonPoints(json) {
 		if (isNaN(e) || isNaN(n)){
 			continue;//cant put point on map without a lat/lon
 		}
-		
+
 //		var finallat = n;
 //		var finallon = e;
-		
+
 		var en = new google.maps.LatLng(n,e);
 		// Plot GPS points as a line
 		if((entry['type'] == 0)){
@@ -504,7 +535,7 @@ function loadJsonPoints(json) {
 		if((entry['type'] == 6)){
 			addCharityPt(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], 2)
 		}
-		
+
 		var en = new google.maps.LatLng(n,e);
 		// Plot GPS points as a line
 		if((entry['type'] == 7)){
@@ -513,7 +544,7 @@ function loadJsonPoints(json) {
 			latesttime = entry['dateTime']
 		}
 	}
-	
+
 	var finalptpin = new google.maps.Marker({
 				position: finalpt,
 				map: map,
@@ -523,9 +554,9 @@ function loadJsonPoints(json) {
 				size: new google.maps.Size(1, 1),
 				zIndex: 1,
 			});
-	
+
 //	getlocaltime(finallat,finallon);
-	
+
 	var Path = new google.maps.Polyline({
 			path: linepoints,
 			geodesic: true,
@@ -565,7 +596,7 @@ function addImgPt(imgloc, imgid, imgtitle, imgdesc, imgresource){
 			new google.maps.event.addListener(imgptplus.marker, 'click', function() {
 				showImgInfo(imgid);
 			});
-} 
+}
 
 function addBlogPt(blogloc, blogid, blogtitle, blogdesc, blogresource){
 	blogpt = new google.maps.Marker({
