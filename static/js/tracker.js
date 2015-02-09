@@ -105,6 +105,34 @@ function LogoControl() {
 	map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
 }
 
+function FilterLabelControl() {
+	// Create Control Div
+	var controlDiv = document.createElement('div');
+
+	// Set CSS for the control border
+	var controlUI = document.createElement('div');
+	controlUI.style.cursor = 'pointer';
+	controlUI.style.marginBottom = '22px';
+	controlUI.style.marginLeft = '15px';
+	controlUI.style.textAlign = 'center';
+	controlUI.title = "Map control filters.";
+	controlDiv.appendChild(controlUI);
+
+	// Set CSS for the control interior
+	var controlText = document.createElement('div');
+	controlText.style.color = '#fff';
+	controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+	controlText.style.fontSize = '22px';
+	controlText.style.lineHeight = '38px';
+	controlText.style.paddingLeft = '5px';
+	controlText.style.paddingRight = '5px';
+	controlText.innerHTML = "Filters";
+	controlUI.appendChild(controlText);
+
+	controlDiv.index = 1;
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
+}
+
 
 /**
 * The togglePins function toggles a set of pins visible or not.
@@ -254,6 +282,8 @@ function initialize() {
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
 	loadPoints();
+
+	var filterControl = new FilterLabelControl();
 
 	var blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
 		togglePins(blogPins);
