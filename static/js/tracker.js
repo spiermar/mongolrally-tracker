@@ -1,9 +1,9 @@
-var finishIcon = 'images/finishflag.png';	// start finish icon
-var blogIcon = 'images/blogmarker.png';	// blog icon
-var videoIcon = 'images/videomarker.png';	// video icon
-var photoIcon = 'images/imgmarker.png';	// image icon
-var charityIcon = 'images/imgmac.png'; // charity icon
-var carIcon = 'images/car.png';	// car icon
+var finishIcon = 'static/img/finishflag.png';	// start finish icon
+var blogIcon = 'static/img/blogmarker.png';	// blog icon
+var videoIcon = 'static/img/videomarker.png';	// video icon
+var photoIcon = 'static/img/imgmarker.png';	// image icon
+var charityIcon = 'static/img/imgmac.png'; // charity icon
+var carIcon = 'static/img/car.png';	// car icon
 
 var blogPins = [];
 var photoPins = [];
@@ -94,7 +94,7 @@ function LogoControl() {
 	var logoText = document.createElement('div');
 	logoText.style.paddingLeft = '4px';
 	logoText.style.paddingRight = '4px';
-	logoText.innerHTML = '<img src="images/logo_white.png" width="30%"/>';
+	logoText.innerHTML = '<img src="static/img/logo_white.png" width="30%"/>';
 	logoUI.appendChild(logoText);
 
 	google.maps.event.addDomListener(logoUI, 'click', function() {
@@ -149,6 +149,99 @@ function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
 }
 
 /**
+* The getLatLgn function create a LatLgn object based on coordinates.
+*/
+function getLatLgn(lat,lgn) {
+	var e = NaN;
+	var n = NaN;
+	if((lat != null) && (lgn != null)) {
+		n = parseFloat(lat);
+		e = parseFloat(lgn);
+	}
+	if (isNaN(e) || isNaN(n)){
+		return;
+	}
+	return new google.maps.LatLng(n,e);
+}
+
+/**
+* The loadPoints function loads all points from the API and adds them to the map.
+*/
+function loadPoints() {
+	$.getJSON('api/v1/points/video', function(points) {
+		$.each(points, function (index, point) {
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], videoIcon, 3, videoPins);
+		});
+	});
+
+	$.getJSON('api/v1/points/photo', function(points) {
+		$.each(points, function (index, point) {
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], photoIcon, 4, photoPins);
+		});
+	});
+
+	$.getJSON('api/v1/points/blog', function(points) {
+		$.each(points, function (index, point) {
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], blogIcon, 3, blogPins);
+		});
+	});
+
+	$.getJSON('api/v1/points/charity', function(points) {
+		$.each(points, function (index, point) {
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], charityIcon, 5, charityPins);
+		});
+	});
+
+	$.getJSON('api/v1/points/route', function(points) {
+		$.each(points, function (index, point) {
+			var finish = new google.maps.Marker({
+				position: getLatLgn(point['latitude'], point['longitude']),
+				map: map,
+				title: point['pttitle'],
+				icon: finishIcon,
+				size: new google.maps.Size(1, 1.5),
+				zIndex: 2
+			});
+		});
+	});
+
+	$.getJSON('api/v1/points/gps', function(points) {
+		var linePoints = [];
+		var finalPoint;
+		var time;
+		var en;
+
+		$.each(points, function (index, point) {
+			en = getLatLgn(point['latitude'], point['longitude']);
+			linePoints.push(en);
+			finalPoint = en;
+			time = point['dateTime'];
+		});
+
+		var currentLocation = new google.maps.Marker({
+					position: finalPoint,
+					map: map,
+					title: "Current Location at: " + time,
+					icon: carIcon,
+					animation: google.maps.Animation.DROP,
+					size: new google.maps.Size(1, 1),
+					zIndex: 1,
+				});
+
+		var Path = new google.maps.Polyline({
+				path: linePoints,
+				geodesic: true,
+				strokeColor: '#FF0000',
+				strokeOpacity: 1.0,
+				strokeWeight: 2,
+				map: map,
+				geodesic: true,
+				zIndex: 1
+		});
+	});
+}
+
+/**
 * The initialize function initializes the map.
 */
 function initialize() {
@@ -160,8 +253,7 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-	//load the spreadsheet data
-	getJsonPoints();
+	loadPoints();
 
 	var blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
 		togglePins(blogPins);
@@ -181,126 +273,6 @@ function initialize() {
 	});
 
 	var logoControl = new LogoControl();
-}
-
-function getJsonPoints() {
-
-	// Retrieve the JSON feed.
-	var script = document.createElement('script');
-
-	script.setAttribute('src', '/JSONrouteout?callback=loadJsonPoints');
-	script.setAttribute('id', 'jsonScript');
-	script.setAttribute('type', 'text/javascript');
-	document.documentElement.firstChild.appendChild(script);
-}
-
-function loadJsonPoints(json) {
-
-	var finalpt;
-
-	linepoints = new Array();
-	linepointsback = new Array();
-	for (var i = 0; i < json.data.length; i++) {
-
-		var entry = json.data[i];
-
-		//get lat/lon
-		var e = NaN;
-		var n = NaN;
-		if((entry['latitude'] != null) && (entry['longitude'] != null)){
-		  e = parseFloat(entry['longitude']);
-		  n = parseFloat(entry['latitude']);
-		}
-		if (isNaN(e) || isNaN(n)){
-			continue;//cant put point on map without a lat/lon
-		}
-
-//		var finallat = n;
-//		var finallon = e;
-
-		var en = new google.maps.LatLng(n,e);
-		// Plot GPS points as a line
-		if((entry['type'] == 0)){
-			linepoints.push(en)
-			finalpt = en;
-			latesttime = entry['dateTime']
-		}
-
-		// Plot Start Finish Points
-		if((entry['type'] == 1)){
-			startfinishpt = new google.maps.Marker({
-				position: en,
-				map: map,
-				title:entry['pttitle'],
-				icon: finishIcon,
-				size: new google.maps.Size(1, 1.5),
-				zIndex: 2
-			});
-		}
-		// Plot the video points
-		if((entry['type'] == 2)){
-			addPin(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], videoIcon, 3, videoPins)
-		}
-		// Plot the blog points
-		if((entry['type'] == 3)){
-			addPin(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], blogIcon, 3, blogPins)
-		}
-		// Plot the image points
-		if((entry['type'] == 4)){
-			addPin(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], photoIcon, 4, photoPins)
-		}
-		// Plot any charity 1 points
-		if((entry['type'] == 5)){
-			addPin(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], charityIcon, 5, charityPins)
-		}
-		// Plot any charity 2 points
-		if((entry['type'] == 6)){
-			addPin(en, entry['id'], entry['pttitle'], entry['ptdesc'], entry['ptresource'], charityIcon, 5, charityPins)
-		}
-
-		var en = new google.maps.LatLng(n,e);
-		// Plot GPS points as a line
-		if((entry['type'] == 7)){
-			linepointsback.push(en)
-			finalpt = en;
-			latesttime = entry['dateTime']
-		}
-	}
-
-	var finalptpin = new google.maps.Marker({
-				position: finalpt,
-				map: map,
-				title: "CURRENT LOCATION AT " + latesttime,
-				icon: carIcon,
-				animation: google.maps.Animation.DROP,
-				size: new google.maps.Size(1, 1),
-				zIndex: 1,
-			});
-
-//	getlocaltime(finallat,finallon);
-
-	var Path = new google.maps.Polyline({
-			path: linepoints,
-			geodesic: true,
-			strokeColor: '#FF0000',
-			strokeOpacity: 1.0,
-			strokeWeight: 2,
-			map: map,
-			geodesic: true,
-			zIndex: 1
-	});
-
-	var PathBack = new google.maps.Polyline({
-			path: linepointsback,
-			geodesic: true,
-			strokeColor: '#0000FF',
-			strokeOpacity: 1.0,
-			strokeWeight: 2,
-			map: map,
-			geodesic: true,
-			zIndex: 1
-	});
-
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

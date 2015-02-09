@@ -9,11 +9,35 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon\.ico
 
+- url: /api/v1/points/blog
+  static_files: blog_points.json
+  upload: blog_points.json
+
+- url: /api/v1/points/gps
+  static_files: gps_points.json
+  upload: gps_points.json
+
+- url: /api/v1/points/photo
+  static_files: photo_points.json
+  upload: photo_points.json
+
+- url: /api/v1/points/route
+  static_files: route_points.json
+  upload: route_points.json
+
+- url: /api/v1/points/video
+  static_files: video_points.json
+  upload: video_points.json
+
+- url: /api/v1/points/charity
+  static_files: charity_points.json
+  upload: charity_points.json
+
 - url: /
   static_files: static/index.html
   upload: static/index.html
 
-- url: /
+- url: /static
   static_dir: static
 
 - url: .*
