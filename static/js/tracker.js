@@ -139,7 +139,7 @@ function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
 				icon: icon,
 				size: new google.maps.Size(1, 1),
 				zIndex: zIndex,
-				visible: false
+				visible: true
 			});
 	var pin = new Pin(marker, id, title, desc, resource);
 	pinList.push(pin);
