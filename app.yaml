@@ -33,6 +33,10 @@ handlers:
   static_files: charity_points.json
   upload: charity_points.json
 
+- url: /api/v1/kml/route.kml
+  static_files: route.kml
+  upload: route.kml
+
 - url: /
   static_files: static/index.html
   upload: static/index.html

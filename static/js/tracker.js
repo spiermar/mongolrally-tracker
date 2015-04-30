@@ -10,6 +10,9 @@ var photoPins = [];
 var videoPins = [];
 var charityPins = [];
 
+var routeUrl = 'http://www.tripline.net/api/ge_kml.php/Yakin%27_Around_-_Mongol_Rally_2015.kml?t_id=5153405654401010A51AE94C52C5337F';
+var trackerUrl = 'http://www.tripline.net/api/ge_kml.php/Mongol_Rally.kml?t_id=07102603702010059C3AC63443D845C0';
+
 // Implementing String.format
 if (!String.prototype.format) {
 	String.prototype.format = function() {
@@ -176,6 +179,14 @@ function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
 	});
 }
 
+function loadKml(map, kmlUrl) {
+		var kmlLayer = new google.maps.KmlLayer({
+    		url: kmlUrl
+  	});
+		kmlLayer.setMap(map);
+}
+
+
 /**
 * The getLatLgn function create a LatLgn object based on coordinates.
 */
@@ -195,7 +206,7 @@ function getLatLgn(lat,lgn) {
 /**
 * The loadPoints function loads all points from the API and adds them to the map.
 */
-function loadPoints() {
+function loadPoints(map) {
 	$.getJSON('api/v1/points/video', function(points) {
 		$.each(points, function (index, point) {
 			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], videoIcon, 3, videoPins);
@@ -220,7 +231,7 @@ function loadPoints() {
 		});
 	});
 
-	$.getJSON('api/v1/points/route', function(points) {
+	/* $.getJSON('api/v1/points/route', function(points) {
 		$.each(points, function (index, point) {
 			var finish = new google.maps.Marker({
 				position: getLatLgn(point['latitude'], point['longitude']),
@@ -231,9 +242,9 @@ function loadPoints() {
 				zIndex: 2
 			});
 		});
-	});
+	}); */
 
-	$.getJSON('api/v1/points/gps', function(points) {
+	/*$.getJSON('api/v1/points/gps', function(points) {
 		var linePoints = [];
 		var finalPoint;
 		var time;
@@ -266,7 +277,7 @@ function loadPoints() {
 				geodesic: true,
 				zIndex: 1
 		});
-	});
+	});*/
 }
 
 /**
@@ -281,7 +292,14 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-	loadPoints();
+	/* loading points */
+	loadPoints(map);
+
+	/* loading route */
+	loadKml(map, routeUrl);
+
+	/* loading tracker data */
+	loadKml(map, trackerUrl);
 
 	var filterControl = new FilterLabelControl();
 
