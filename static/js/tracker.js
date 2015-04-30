@@ -180,10 +180,21 @@ function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
 }
 
 function loadKml(map, kmlUrl) {
-		var kmlLayer = new google.maps.KmlLayer({
-    		url: kmlUrl
-  	});
-		kmlLayer.setMap(map);
+	var kmlLayer = new google.maps.KmlLayer({
+    url: kmlUrl
+  });
+
+	kmlLayer.setMap(map);
+
+	return kmlLayer;
+}
+
+function toggleLayer(map, layer) {
+	if(layer.getMap() === null) {
+		layer.setMap(map);
+	} else {
+		layer.setMap(null);
+	}
 }
 
 
@@ -296,12 +307,16 @@ function initialize() {
 	loadPoints(map);
 
 	/* loading route */
-	loadKml(map, routeUrl);
+	var routeLayer = loadKml(map, routeUrl);
 
 	/* loading tracker data */
-	loadKml(map, trackerUrl);
+	var trackerLayer = loadKml(map, trackerUrl);
 
 	var filterControl = new FilterLabelControl();
+
+	var routeControl = new MapControl(map, "Route", "Click to toggle route.", function () {
+		toggleLayer(map, routeLayer);
+	});
 
 	var blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
 		togglePins(blogPins);
