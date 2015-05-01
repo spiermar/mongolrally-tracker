@@ -2,15 +2,16 @@ var finishIcon = 'static/img/finishflag.png';	// start finish icon
 var blogIcon = 'static/img/blogmarker.png';	// blog icon
 var videoIcon = 'static/img/videomarker.png';	// video icon
 var photoIcon = 'static/img/imgmarker.png';	// image icon
-var charityIcon = 'static/img/imgmac.png'; // charity icon
 var carIcon = 'static/img/car.png';	// car icon
 
 var blogPins = [];
 var photoPins = [];
 var videoPins = [];
-var charityPins = [];
 
-var routeUrl = 'http://www.tripline.net/api/ge_kml.php/Yakin%27_Around_-_Mongol_Rally_2015.kml?t_id=5153405654401010A51AE94C52C5337F';
+var routePath = null;
+var startMarker = null;
+var finishMarker = null;
+
 var trackerUrl = 'http://www.tripline.net/api/ge_kml.php/Mongol_Rally.kml?t_id=07102603702010059C3AC63443D845C0';
 
 // Implementing String.format
@@ -220,40 +221,58 @@ function getLatLgn(lat,lgn) {
 function loadPoints(map) {
 	$.getJSON('api/v1/points/video', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], videoIcon, 3, videoPins);
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
 		});
 	});
 
 	$.getJSON('api/v1/points/photo', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], photoIcon, 4, photoPins);
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
 		});
 	});
 
 	$.getJSON('api/v1/points/blog', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], blogIcon, 3, blogPins);
+			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
 		});
 	});
 
-	$.getJSON('api/v1/points/charity', function(points) {
+	$.getJSON('api/v1/points/route', function(points) {
+		var routePoints = [];
+
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['pttitle'], point['ptdesc'], point['ptresource'], charityIcon, 5, charityPins);
+			routePoints.push(getLatLgn(point['latitude'], point['longitude']));
+		});
+
+		routePath = new google.maps.Polyline({
+			path: routePoints,
+			geodesic: true,
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.5,
+			strokeWeight: 5,
+			map: map,
+			geodesic: true,
+			zIndex: 1
+		});
+
+		finishMarker = new google.maps.Marker({
+			position: getLatLgn(points[points.length - 1]['latitude'], points[points.length - 1]['longitude']),
+			map: map,
+			title: points[points.length - 1]['title'],
+			icon: finishIcon,
+			size: new google.maps.Size(1, 1.5),
+			zIndex: 2
+		});
+
+		startMarker = new google.maps.Marker({
+			position: getLatLgn(points[0]['latitude'], points[0]['longitude']),
+			map: map,
+			title: points[0]['title'],
+			icon: finishIcon,
+			size: new google.maps.Size(1, 1.5),
+			zIndex: 2
 		});
 	});
-
-	/* $.getJSON('api/v1/points/route', function(points) {
-		$.each(points, function (index, point) {
-			var finish = new google.maps.Marker({
-				position: getLatLgn(point['latitude'], point['longitude']),
-				map: map,
-				title: point['pttitle'],
-				icon: finishIcon,
-				size: new google.maps.Size(1, 1.5),
-				zIndex: 2
-			});
-		});
-	}); */
 
 	/*$.getJSON('api/v1/points/gps', function(points) {
 		var linePoints = [];
@@ -306,16 +325,13 @@ function initialize() {
 	/* loading points */
 	loadPoints(map);
 
-	/* loading route */
-	var routeLayer = loadKml(map, routeUrl);
-
 	/* loading tracker data */
 	var trackerLayer = loadKml(map, trackerUrl);
 
 	var filterControl = new FilterLabelControl();
 
 	var routeControl = new MapControl(map, "Route", "Click to toggle route.", function () {
-		toggleLayer(map, routeLayer);
+		toggleLayer(map, routePath);
 	});
 
 	var blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
@@ -329,10 +345,6 @@ function initialize() {
 
 	var photoControl = new MapControl(map, "Photo", "Click to toggle photo pins.", function () {
 		togglePins(photoPins);
-	});
-
-	var charityControl = new MapControl(map, "Charity", "Click to toggle charity pins.", function () {
-		togglePins(charityPins);
 	});
 
 	var logoControl = new LogoControl();
