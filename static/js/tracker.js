@@ -12,7 +12,7 @@ var routePath = null;
 var startMarker = null;
 var finishMarker = null;
 
-var trackerUrl = 'http://www.tripline.net/api/ge_kml.php/Mongol_Rally.kml?t_id=07102603702010059C3AC63443D845C0';
+/* var trackerUrl = 'http://www.tripline.net/api/ge_kml.php/Mongol_Rally.kml?t_id=07102603702010059C3AC63443D845C0'; */
 
 // Implementing String.format
 if (!String.prototype.format) {
@@ -252,7 +252,7 @@ function loadPoints(map) {
 			strokeWeight: 5,
 			map: map,
 			geodesic: true,
-			zIndex: 1
+			zIndex: 2
 		});
 
 		finishMarker = new google.maps.Marker({
@@ -274,7 +274,7 @@ function loadPoints(map) {
 		});
 	});
 
-	/*$.getJSON('api/v1/points/gps', function(points) {
+	$.getJSON('api/v1/points/tracker', function(points) {
 		var linePoints = [];
 		var finalPoint;
 		var time;
@@ -300,14 +300,14 @@ function loadPoints(map) {
 		var Path = new google.maps.Polyline({
 				path: linePoints,
 				geodesic: true,
-				strokeColor: '#FF0000',
-				strokeOpacity: 1.0,
-				strokeWeight: 2,
+				strokeColor: '#0000FF',
+				strokeOpacity: 0.5,
+				strokeWeight: 5,
 				map: map,
 				geodesic: true,
 				zIndex: 1
 		});
-	});*/
+	});
 }
 
 /**
@@ -325,8 +325,8 @@ function initialize() {
 	/* loading points */
 	loadPoints(map);
 
-	/* loading tracker data */
-	var trackerLayer = loadKml(map, trackerUrl);
+	/* loading tracker kml */
+	/* var trackerLayer = loadKml(map, trackerUrl); */
 
 	var filterControl = new FilterLabelControl();
 

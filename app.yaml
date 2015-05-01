@@ -13,10 +13,6 @@ handlers:
   static_files: blog_points.json
   upload: blog_points.json
 
-- url: /api/v1/points/gps
-  static_files: gps_points.json
-  upload: gps_points.json
-
 - url: /api/v1/points/photo
   static_files: photo_points.json
   upload: photo_points.json
@@ -25,17 +21,13 @@ handlers:
   static_files: route_points.json
   upload: route_points.json
 
+- url: /api/v1/points/tracker
+  static_files: tracker_points.json
+  upload: tracker_points.json
+
 - url: /api/v1/points/video
   static_files: video_points.json
   upload: video_points.json
-
-- url: /api/v1/points/charity
-  static_files: charity_points.json
-  upload: charity_points.json
-
-- url: /api/v1/kml/route.kml
-  static_files: route.kml
-  upload: route.kml
 
 - url: /
   static_files: static/index.html
