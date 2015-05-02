@@ -3,7 +3,6 @@ from flask import Flask, jsonify
 from pykml import parser
 import logging
 import urllib2
-import json
 import time
 
 app = Flask(__name__)
@@ -48,4 +47,4 @@ def loadRoute():
 		coordinates = placemark.MultiGeometry.Point.coordinates.text.split(',')
 		placemarks.append({"id": placemark.attrib["id"], "latitude": coordinates[1], "longitude": coordinates[0], "title": placemark.name.text, "desc": "Route Point", "resource": "", "dateTime": time.time(), "type": 1})
 
-	return json.dumps(placemarks)
+	return jsonify({"placemarks": placemarks})

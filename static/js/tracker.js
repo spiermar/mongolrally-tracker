@@ -237,8 +237,9 @@ function loadPoints(map) {
 		});
 	});
 
-	$.getJSON('api/v1/points/route', function(points) {
+	$.getJSON('api/v1/points/route', function(route) {
 		var routePoints = [];
+		var points = route.placemarks;
 
 		$.each(points, function (index, point) {
 			routePoints.push(getLatLgn(point['latitude'], point['longitude']));
