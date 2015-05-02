@@ -8,5 +8,4 @@ import logging
 
 app = Flask(__name__)
 
-# Pull in URL dispatch routes
-import urls
+import views
