@@ -37,7 +37,7 @@ handlers:
   static_dir: static
 
 - url: .*
-  script: main.app
+  script: tracker.app
 
 inbound_services:
 - warmup
