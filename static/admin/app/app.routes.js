@@ -6,12 +6,17 @@
     * @desc Define valid application routes
     */
     function config($routeProvider) {
-        $routeProvider.when('/route', {
+        $routeProvider.when('/', {
+            templateUrl: '/static/admin/app/main/main.html',
+            controller: 'MainController',
+            title: 'Home | Yakin Around'
+        })
+        .when('/route', {
             templateUrl: '/static/admin/app/route/route.html',
             controller: 'RouteController',
             title: 'Route | Yakin Around'
         })
-        .otherwise('/route');
+        .otherwise('/');
     }
 
     config.$inject = ['$routeProvider'];
