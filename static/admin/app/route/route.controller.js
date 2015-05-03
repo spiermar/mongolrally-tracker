@@ -11,14 +11,22 @@
   * @desc
   */
 
-  function RouteCtrl($scope) {
-    $scope.title = 'Route';
+  function RouteCtrl($scope, $log, Route) {
+    $scope.route = Route.query();
+
+    $scope.config = {
+      itemsPerPage: 10,
+      fillLastPage: false
+    }
+
   }
 
   RouteCtrl.$inject = [
-    '$scope'
+    '$scope',
+    '$log',
+    'Route'
   ];
 
-  angular.module('app.route', []).controller('RouteController', RouteCtrl);
+  angular.module('app.route').controller('RouteController', RouteCtrl);
 
 })();

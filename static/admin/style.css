@@ -1,0 +1,24 @@
+body, html {
+    height: 100% !important;
+}
+
+#wrapper {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#page-wrapper {
+    padding: 0 15px !important;
+    min-height: 568px !important;
+    background-color: #fff !important;
+}
+
+@media(min-width:768px) {
+    #page-wrapper {
+        position: inherit !important;
+        margin: 0 0 0 250px !important;
+        padding: 0 30px !important;
+        min-height: 100% !important;
+        border-left: 1px solid #e7e7e7 !important;
+    }
+}
