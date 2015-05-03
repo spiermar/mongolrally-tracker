@@ -9,10 +9,11 @@ For example the *say_hello* handler, handling the URL route '/hello/<username>',
 
 """
 
-from flask import jsonify, request
+from flask import request, Response
 from pykml import parser
 import urllib2
 import time
+import json
 
 from tracker import app
 
@@ -85,4 +86,4 @@ def list_point(type):
     for point in points:
         points_dict.append(point.to_dict())
 
-    return jsonify({"points": points_dict})
+    return Response(json.dumps(points_dict), mimetype='application/json');
