@@ -32,7 +32,7 @@
 
 </head>
 
-<body>
+<body ng-app="app">
 
     <div id="wrapper">
 
@@ -66,25 +66,25 @@
                             <a href="#"><i class="fa fa-map-marker fa-fw"></i> Markers<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Blogs</a>
+                                    <a href="#blogs">Blogs</a>
                                 </li>
                                 <li>
-                                    <a href="#">Photos</a>
+                                    <a href="#photos">Photos</a>
                                 </li>
                                 <li>
-                                    <a href="#">Videos</a>
+                                    <a href="#videos">Videos</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-car fa-fw"></i> Tracker</a>
+                            <a href="#tracker"><i class="fa fa-car fa-fw"></i> Tracker</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-road fa-fw"></i> Route</a>
+                            <a href="#route"><i class="fa fa-road fa-fw"></i> Route</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-flickr fa-fw"></i> Flickr</a>
+                            <a href="#flickr"><i class="fa fa-flickr fa-fw"></i> Flickr</a>
                         </li>
                     </ul>
                 </div>
@@ -93,21 +93,7 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Tables</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-        </div>
+        <div id="page-wrapper" ng-view=""></div>
         <!-- /#page-wrapper -->
 
     </div>
@@ -124,6 +110,16 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/admin/vendor/sb-admin-2/js/sb-admin-2.js"></script>
+
+    <!-- AngularJS -->
+    <script src="/static/admin/vendor/angular/angular.min.js"></script>
+    <script src="/static/admin/vendor/angular/angular-route.min.js"></script>
+    <script src="/static/admin/vendor/angular/angular-resource.min.js"></script>
+
+    <!-- App -->
+    <script src="/static/admin/app/app.js"></script>
+    <script src="/static/admin/app/app.routes.js"></script>
+    <script src="/static/admin/app/route/route.controller.js"></script>
 
 </body>
 
