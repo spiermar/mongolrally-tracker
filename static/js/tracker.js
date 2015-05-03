@@ -239,9 +239,8 @@ function loadPoints(map) {
 
 	$.getJSON('api/v1/points/route', function(data) {
 		var routePoints = [];
-		var points = data.points;
 
-		$.each(points, function (index, point) {
+		$.each(data.points, function (index, point) {
 			routePoints.push(getLatLgn(point['latitude'], point['longitude']));
 		});
 
