@@ -13,7 +13,7 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon\.ico
 
-- url: /api/v1/points/tracker
+- url: /api/v1/point/tracker
   static_files: tracker_points.json
   upload: tracker_points.json
 
