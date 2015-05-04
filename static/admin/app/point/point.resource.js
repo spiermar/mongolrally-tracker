@@ -7,21 +7,21 @@
     'use strict';
 
   /**
-  * @name RouteResource
+  * @name PointResource
   * @desc
   */
-  function RouteResource($resource) {
-    return $resource('/api/v1/points/route/:id', { id: '@id' }, {
+  function PointResource($resource) {
+    return $resource('/api/v1/point/:type/:id', { type: '@type', id: '@id' }, {
       update: {
         method: 'PUT'
       }
     });
   }
 
-  RouteResource.$inject = [
+  PointResource.$inject = [
     '$resource'
   ];
 
-  angular.module('app.route').factory('Route', RouteResource);
+  angular.module('app.point').factory('Point', PointResource);
 
 })();

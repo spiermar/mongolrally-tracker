@@ -35,7 +35,7 @@ def page_not_found(e):
 def warmup():
 	return ''
 
-@app.route('/api/v1/points/route/load', methods=['POST'])
+@app.route('/api/v1/point/route/load', methods=['POST'])
 def load_route():
     url = request.form['url']
     obj = urllib2.urlopen(url)
@@ -79,7 +79,7 @@ def load_route():
 
     return list_point('route')
 
-@app.route('/api/v1/points/<type>', methods=['GET'])
+@app.route('/api/v1/point/<type>', methods=['GET'])
 def list_point(type):
     points_dict = []
     points = Point.query(Point.type == type).order(Point.date, Point.pointid).fetch()
@@ -89,13 +89,13 @@ def list_point(type):
     return Response(json.dumps(points_dict), mimetype='application/json');
 
 
-@app.route('/api/v1/points/<type>/<id>', methods=['GET'])
+@app.route('/api/v1/point/<type>/<id>', methods=['GET'])
 def get_point(type, id):
     point = Point.get_by_id(int(id))
     return Response(json.dumps(point.to_dict()), mimetype='application/json');
 
 
-@app.route('/api/v1/points/<type>/<id>', methods=['PUT'])
+@app.route('/api/v1/point/<type>/<id>', methods=['PUT'])
 def update_point(type, id):
     point = Point.get_by_id(int(id))
     data = json.loads(request.data)

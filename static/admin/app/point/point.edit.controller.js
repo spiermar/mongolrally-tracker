@@ -7,34 +7,34 @@
     'use strict';
 
   /**
-  * @name RouteEditCtrl
+  * @name EditPointCtrl
   * @desc
   */
 
-  function RouteEditCtrl($scope, $log, $location, $routeParams, Route) {
+  function EditPointCtrl($scope, $log, $location, $routeParams, Point) {
 
     $scope.updatePoint = function() {
       $scope.point.$update(function() {
-        $location.path( "/route" );
+        $location.path( "/point/" + $scope.point.type );
       });
     };
 
     $scope.loadPoint = function() {
-      $scope.point = Route.get({ id: $routeParams.id });
+      $scope.point = Point.get({ type: $routeParams.type, id: $routeParams.id });
     };
 
     $scope.loadPoint();
 
   }
 
-  RouteEditCtrl.$inject = [
+  EditPointCtrl.$inject = [
     '$scope',
     '$log',
     '$location',
     '$routeParams',
-    'Route'
+    'Point'
   ];
 
-  angular.module('app.route').controller('RouteEditController', RouteEditCtrl);
+  angular.module('app.point').controller('EditPointController', EditPointCtrl);
 
 })();

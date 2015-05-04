@@ -11,20 +11,20 @@
             controller: 'MainController',
             title: 'Home | Yakin Around'
         })
-        .when('/route', {
-            templateUrl: '/static/admin/app/route/route-list.html',
-            controller: 'RouteListController',
-            title: 'Route | Yakin Around'
+        .when('/point/:type', {
+            templateUrl: '/static/admin/app/point/point-list.html',
+            controller: 'ListPointController',
+            title: 'Yakin Around'
         })
-        .when('/route/new', {
-            templateUrl: '/static/admin/app/route/route-new.html',
-            controller: 'RouteNewController',
-            title: 'Route | Yakin Around'
+        .when('/point/:type/new', {
+            templateUrl: '/static/admin/app/point/point-new.html',
+            controller: 'NewPointController',
+            title: 'Yakin Around'
         })
-        .when('/route/:id/edit', {
-            templateUrl: '/static/admin/app/route/route-edit.html',
-            controller: 'RouteEditController',
-            title: 'Route | Yakin Around'
+        .when('/point/:type/:id/edit', {
+            templateUrl: '/static/admin/app/point/point-edit.html',
+            controller: 'EditPointController',
+            title: 'Yakin Around'
         })
         .otherwise('/');
     }

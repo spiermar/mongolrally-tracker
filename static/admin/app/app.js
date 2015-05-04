@@ -4,12 +4,12 @@
 
   angular.module('app.routes', ['ngRoute']);
 
-  angular.module('app.route', []);
+  angular.module('app.point', []);
 
   angular.module('app', [
     'app.routes',
     'app.main',
-    'app.route',
+    'app.point',
     'ngResource',
     'angular-table'
   ]);

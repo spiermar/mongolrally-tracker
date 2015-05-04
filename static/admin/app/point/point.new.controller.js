@@ -7,19 +7,19 @@
     'use strict';
 
   /**
-  * @name RouteNewCtrl
+  * @name NewPointCtrl
   * @desc
   */
 
-  function RouteNewCtrl($scope, $log, Route) {
+  function NewPointCtrl($scope, $log, Point) {
   }
 
-  RouteNewCtrl.$inject = [
+  NewPointCtrl.$inject = [
     '$scope',
     '$log',
-    'Route'
+    'Point'
   ];
 
-  angular.module('app.route').controller('RouteNewController', RouteNewCtrl);
+  angular.module('app.point').controller('NewPointController', NewPointCtrl);
 
 })();
