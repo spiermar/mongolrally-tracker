@@ -219,25 +219,25 @@ function getLatLgn(lat,lgn) {
 * The loadPoints function loads all points from the API and adds them to the map.
 */
 function loadPoints(map) {
-	$.getJSON('api/v1/points/video', function(points) {
+	$.getJSON('api/v1/point/video', function(points) {
 		$.each(points, function (index, point) {
 			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
 		});
 	});
 
-	$.getJSON('api/v1/points/photo', function(points) {
+	$.getJSON('api/v1/point/photo', function(points) {
 		$.each(points, function (index, point) {
 			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
 		});
 	});
 
-	$.getJSON('api/v1/points/blog', function(points) {
+	$.getJSON('api/v1/point/blog', function(points) {
 		$.each(points, function (index, point) {
 			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
 		});
 	});
 
-	$.getJSON('api/v1/points/route', function(points) {
+	$.getJSON('api/v1/point/route', function(points) {
 		var routePoints = [];
 
 		$.each(points, function (index, point) {
@@ -274,7 +274,7 @@ function loadPoints(map) {
 		});
 	});
 
-	$.getJSON('api/v1/points/tracker', function(points) {
+	$.getJSON('api/v1/point/tracker', function(points) {
 		var linePoints = [];
 		var finalPoint;
 		var time;
