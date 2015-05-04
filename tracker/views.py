@@ -50,7 +50,7 @@ def load_route():
 
     root = parser.fromstring(kml_str)
 
-    id = 0
+    pointid = 0
     for placemark in root.Document.Folder.Placemark:
         coordinates = placemark.MultiGeometry.Point.coordinates.text.split(',')
         try:
@@ -59,7 +59,7 @@ def load_route():
                 type = 'route',
                 latitude = float(coordinates[1]),
                 longitude = float(coordinates[0]),
-                id = id
+                pointid = pointid
             )
         except TypeError:
             abort(500)
@@ -75,15 +75,40 @@ def load_route():
             logging.error(e.args[0])
             abort(500)
 
-        id +=1
+        pointid += 1
 
     return list_point('route')
 
 @app.route('/api/v1/points/<type>', methods=['GET'])
 def list_point(type):
     points_dict = []
-    points = Point.query(Point.type == type).order(Point.date, Point.id).fetch()
+    points = Point.query(Point.type == type).order(Point.date, Point.pointid).fetch()
     for point in points:
         points_dict.append(point.to_dict())
 
     return Response(json.dumps(points_dict), mimetype='application/json');
+
+
+@app.route('/api/v1/points/<type>/<id>', methods=['GET'])
+def get_point(type, id):
+    point = Point.get_by_id(int(id))
+    return Response(json.dumps(point.to_dict()), mimetype='application/json');
+
+
+@app.route('/api/v1/points/<type>/<id>', methods=['PUT'])
+def update_point(type, id):
+    point = Point.get_by_id(int(id))
+    data = json.loads(request.data)
+    point.title = data['title']
+    point.latitude = data['latitude']
+    point.longitude = data['longitude']
+    try:
+        point.put()
+    except CapabilityDisabledError:
+        logging.error(u'App Engine Datastore is currently in read-only mode.')
+        abort(500)
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(500)
+
+    return Response(json.dumps(point.to_dict()), mimetype='application/json');

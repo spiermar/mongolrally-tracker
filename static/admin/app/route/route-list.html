@@ -11,9 +11,11 @@
         <thead></thead>
         <tbody>
           <tr>
-            <td at-implicit at-attribute="title" at-title="Place"></td>
-            <td at-implicit at-attribute="latitude" at-title="Latitude"></td>
-            <td at-implicit at-attribute="longitude" at-title="Longitude"></td>
+            <td at-implicit at-attribute="title" at-title="Place" width="50%"></td>
+            <td at-implicit at-attribute="latitude" at-title="Latitude" width="20%"></td>
+            <td at-implicit at-attribute="longitude" at-title="Longitude" width="20%"></td>
+            <td width="5%"><a href="#/route/{{item.id}}/edit" type="button" class="btn btn-default"><i class="fa fa-pencil"></i></button></td>
+            <td width="5%"><a href="#" type="button" class="btn btn-default"><i class="fa fa-trash-o"></i></button></td>
           </tr>
         </tbody>
       </table>

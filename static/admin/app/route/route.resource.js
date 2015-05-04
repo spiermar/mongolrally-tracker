@@ -11,7 +11,11 @@
   * @desc
   */
   function RouteResource($resource) {
-    return $resource('/api/v1/points/route/:id');
+    return $resource('/api/v1/points/route/:id', { id: '@id' }, {
+      update: {
+        method: 'PUT'
+      }
+    });
   }
 
   RouteResource.$inject = [

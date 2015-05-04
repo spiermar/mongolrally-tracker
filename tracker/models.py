@@ -14,8 +14,8 @@ class Point(ndb.Model):
     longitude = ndb.FloatProperty(required=True)
     resource = ndb.StringProperty()
     type = ndb.StringProperty(required=True)
-    id = ndb.IntegerProperty()
     date = ndb.DateTimeProperty()
+    pointid = ndb.IntegerProperty()
 
     @classmethod
     def delete_all(cls, delete_type):
@@ -23,3 +23,8 @@ class Point(ndb.Model):
             cls.query(cls.type == delete_type).fetch(keys_only=True)
         )
         return True
+
+    def to_dict(self):
+        result = super(Point,self).to_dict()
+        result['id'] = self.key.id()
+        return result

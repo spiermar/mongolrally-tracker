@@ -12,8 +12,18 @@
             title: 'Home | Yakin Around'
         })
         .when('/route', {
-            templateUrl: '/static/admin/app/route/route.html',
-            controller: 'RouteController',
+            templateUrl: '/static/admin/app/route/route-list.html',
+            controller: 'RouteListController',
+            title: 'Route | Yakin Around'
+        })
+        .when('/route/new', {
+            templateUrl: '/static/admin/app/route/route-new.html',
+            controller: 'RouteNewController',
+            title: 'Route | Yakin Around'
+        })
+        .when('/route/:id/edit', {
+            templateUrl: '/static/admin/app/route/route-edit.html',
+            controller: 'RouteEditController',
             title: 'Route | Yakin Around'
         })
         .otherwise('/');

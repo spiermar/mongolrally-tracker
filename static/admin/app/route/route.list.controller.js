@@ -7,26 +7,26 @@
     'use strict';
 
   /**
-  * @name RouteCtrl
+  * @name RouteListCtrl
   * @desc
   */
 
-  function RouteCtrl($scope, $log, Route) {
+  function RouteListCtrl($scope, $log, Route) {
     $scope.route = Route.query();
 
     $scope.config = {
       itemsPerPage: 10,
-      fillLastPage: false
+      fillLastPage: true
     }
 
   }
 
-  RouteCtrl.$inject = [
+  RouteListCtrl.$inject = [
     '$scope',
     '$log',
     'Route'
   ];
 
-  angular.module('app.route').controller('RouteController', RouteCtrl);
+  angular.module('app.route').controller('RouteListController', RouteListCtrl);
 
 })();

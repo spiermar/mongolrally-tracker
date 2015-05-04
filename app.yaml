@@ -24,13 +24,10 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /admin
+- url: /admin/?
   static_files: static/admin/index.html
   upload: static/admin/index.html
 
-- url: /admin/
-  static_files: static/admin/index.html
-  upload: static/admin/index.html
 
 - url: .*
   script: tracker.app
