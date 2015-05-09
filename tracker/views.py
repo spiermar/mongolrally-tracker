@@ -17,6 +17,7 @@ import urllib2
 import time
 import json
 import logging
+import delorme
 
 from tracker import app
 
@@ -197,3 +198,17 @@ def save_tracker():
         abort(500)
 
     return Response(json.dumps(tracker.to_dict()), mimetype='application/json');
+
+
+@app.route('/api/v1/tracker/load', methods=['GET'])
+def load_tracker():
+    tracker = Tracker.query().order(-Tracker.date_added).get()
+    if tracker is None:
+        return Response(json.dumps({ 'error': 'tracker configuration was not found.' }), status=500, mimetype='application/json');
+
+    if tracker.type == 'delorme':
+        return delorme.load_data(tracker.url)
+    elif tracker.type == 'spot':
+        return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
+    else:
+        return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
