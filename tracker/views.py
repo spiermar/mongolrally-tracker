@@ -39,7 +39,13 @@ def warmup():
 
 @app.route('/api/v1/point/route/load', methods=['POST'])
 def load_route():
-    url = request.form['url']
+    try:
+        data = json.loads(request.data)
+        url = data['url']
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(400)
+
     obj = urllib2.urlopen(url)
     str = obj.read()
     kml_str = ""

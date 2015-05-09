@@ -11,7 +11,7 @@
   * @desc
   */
 
-  function ListPointCtrl($scope, $log, $routeParams, Point) {
+  function ListPointCtrl($scope, $log, $http, $routeParams, Point) {
     $scope.points = Point.query({ type: $routeParams.type });
 
     $scope.type = $routeParams.type;
@@ -26,11 +26,23 @@
         point.$delete();
       });
     }
+
+    $scope.importRoute = function(importUrl) {
+      $http.post('/api/v1/point/route/load', { url: importUrl }).
+        success(function(data, status, headers, config) {
+          $log.info("Successfully imported route.");
+        }).
+        error(function(data, status, headers, config) {
+          $log.error("Error importing route.");
+        });
+      $scope.points = Point.query({ type: $routeParams.type });
+    }
   }
 
   ListPointCtrl.$inject = [
     '$scope',
     '$log',
+    '$http',
     '$routeParams',
     'Point'
   ];

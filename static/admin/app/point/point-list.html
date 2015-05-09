@@ -28,6 +28,7 @@
         </tbody>
       </table>
       <at-pagination at-list="points" at-config="config" ng-if="points.length > 0"></at-pagination>
+      <hr ng-if="points.length <= 0">
       <p class="lead" ng-if="points.length <= 0">Nothing to see here! List is empty!</p>
     </div>
     <!-- /.col-lg-12 -->
@@ -36,10 +37,10 @@
 <div class="row" ng-if="type == 'route'">
   <div class="col-md-8 col-md-offset-2">
     <h1 class="page-header">Import Route</h1>
-    <form>
+    <form role="form" ng-submit="importRoute(importUrl)">
       <div class="form-group">
         <label for="url">Import Url (KLM)</label>
-        <input type="text" class="form-control" id="url" placeholder="Enter Url">
+        <input type="text" class="form-control" id="url" ng-model="importUrl" placeholder="Enter Url">
       </div>
       <button type="submit" class="btn btn-default">Import</button>
     </form>
