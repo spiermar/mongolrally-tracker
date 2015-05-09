@@ -16,10 +16,11 @@ from google.appengine.ext.db import BadValueError
 import urllib2
 import time
 import json
+import logging
 
 from tracker import app
 
-from models import Point
+from models import Point, Tracker
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -163,3 +164,36 @@ def delete_point(type, id):
         abort(500)
 
     return Response(json.dumps({ 'status': 'ok' }), mimetype='application/json');
+
+
+@app.route('/api/v1/tracker/config', methods=['GET'])
+def get_tracker():
+    tracker = Tracker.query().order(-Tracker.date_added).get()
+    return Response(json.dumps(tracker.to_dict()), mimetype='application/json');
+
+
+@app.route('/api/v1/tracker/config', methods=['POST'])
+def save_tracker():
+    try:
+        data = json.loads(request.data)
+        type = data['type']
+        url = data['url']
+        poll_interval = int(data['poll_interval'])
+        tracker = Tracker(
+            type=type,
+            url=url,
+            poll_interval=poll_interval
+        )
+        tracker.put()
+    except CapabilityDisabledError:
+        logging.error(u'App Engine Datastore is currently in read-only mode.')
+        abort(500)
+    except BadValueError:
+        abort(400)
+    except TypeError:
+        abort(400)
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(500)
+
+    return Response(json.dumps(tracker.to_dict()), mimetype='application/json');

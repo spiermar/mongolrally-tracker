@@ -28,3 +28,15 @@ class Point(ndb.Model):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
         return result
+
+
+class Tracker(ndb.Model):
+    type = ndb.StringProperty(required=True)
+    url = ndb.StringProperty(required=True)
+    poll_interval = ndb.IntegerProperty(required=True)
+    date_added = ndb.DateTimeProperty(auto_now=True)
+
+    def to_dict(self):
+        result = super(Tracker,self).to_dict()
+        del result['date_added']
+        return result
