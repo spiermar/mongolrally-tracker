@@ -9,8 +9,10 @@ For example the *say_hello* handler, handling the URL route '/hello/<username>',
 
 """
 
-from flask import request, Response
+from flask import request, Response, abort
 from pykml import parser
+from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
+from google.appengine.ext.db import BadValueError
 import urllib2
 import time
 import json
@@ -112,3 +114,46 @@ def update_point(type, id):
         abort(500)
 
     return Response(json.dumps(point.to_dict()), mimetype='application/json');
+
+
+@app.route('/api/v1/point/<type>', methods=['POST'])
+def add_point(type):
+    try:
+        data = json.loads(request.data)
+        title = data['title']
+        latitude = float(data['latitude'])
+        longitude = float(data['longitude'])
+        point = Point(
+            title=title,
+            latitude=latitude,
+            longitude=longitude,
+            type=type
+        )
+        point.put()
+    except CapabilityDisabledError:
+        logging.error(u'App Engine Datastore is currently in read-only mode.')
+        abort(500)
+    except BadValueError:
+        abort(400)
+    except TypeError:
+        abort(400)
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(500)
+
+    return Response(json.dumps(point.to_dict()), mimetype='application/json');
+
+
+@app.route('/api/v1/point/<type>/<id>', methods=['DELETE'])
+def delete_point(type, id):
+    point = Point.get_by_id(int(id))
+    try:
+        point.key.delete()
+    except CapabilityDisabledError:
+        logging.error(u'App Engine Datastore is currently in read-only mode.')
+        abort(500)
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(500)
+
+    return Response(json.dumps({ 'status': 'ok' }), mimetype='application/json');

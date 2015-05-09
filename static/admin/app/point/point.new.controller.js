@@ -11,12 +11,22 @@
   * @desc
   */
 
-  function NewPointCtrl($scope, $log, Point) {
+  function NewPointCtrl($scope, $log, $location, $routeParams, Point) {
+    $scope.point = new Point();
+    $scope.point.type = $routeParams.type;
+
+    $scope.savePoint = function() {
+      $scope.point.$save(function() {
+        $location.path( "/point/" + $scope.point.type );
+      });
+    };
   }
 
   NewPointCtrl.$inject = [
     '$scope',
     '$log',
+    '$location',
+    '$routeParams',
     'Point'
   ];
 

@@ -14,11 +14,18 @@
   function ListPointCtrl($scope, $log, $routeParams, Point) {
     $scope.points = Point.query({ type: $routeParams.type });
 
+    $scope.type = $routeParams.type;
+
     $scope.config = {
       itemsPerPage: 10,
       fillLastPage: true
     }
 
+    $scope.deletePoint = function(type, id) {
+      var point = Point.get({ type: type, id: id }, function() {
+        point.$delete();
+      });
+    }
   }
 
   ListPointCtrl.$inject = [
