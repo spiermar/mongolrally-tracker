@@ -11,6 +11,11 @@
             controller: 'MainController',
             title: 'Home | Yakin Around'
         })
+        .when('/tracker', {
+            templateUrl: '/static/admin/app/tracker/tracker.html',
+            controller: 'TrackerController',
+            title: 'Yakin Around'
+        })
         .when('/point/:type', {
             templateUrl: '/static/admin/app/point/point-list.html',
             controller: 'ListPointController',
