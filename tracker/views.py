@@ -181,8 +181,7 @@ def save_tracker():
         url = data['url']
         tracker = Tracker(
             type=type,
-            url=url,
-            poll_interval=poll_interval
+            url=url
         )
         tracker.put()
     except CapabilityDisabledError:
