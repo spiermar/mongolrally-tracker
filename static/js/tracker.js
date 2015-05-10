@@ -238,40 +238,42 @@ function loadPoints(map) {
 	});
 
 	$.getJSON('api/v1/point/route', function(points) {
-		var routePoints = [];
+		if(points.length > 0) {
+			var routePoints = [];
 
-		$.each(points, function (index, point) {
-			routePoints.push(getLatLgn(point['latitude'], point['longitude']));
-		});
+			$.each(points, function (index, point) {
+				routePoints.push(getLatLgn(point['latitude'], point['longitude']));
+			});
 
-		routePath = new google.maps.Polyline({
-			path: routePoints,
-			geodesic: true,
-			strokeColor: '#FF0000',
-			strokeOpacity: 0.5,
-			strokeWeight: 5,
-			map: map,
-			geodesic: true,
-			zIndex: 2
-		});
+			routePath = new google.maps.Polyline({
+				path: routePoints,
+				geodesic: true,
+				strokeColor: '#FF0000',
+				strokeOpacity: 0.5,
+				strokeWeight: 5,
+				map: map,
+				geodesic: true,
+				zIndex: 2
+			});
 
-		finishMarker = new google.maps.Marker({
-			position: getLatLgn(points[points.length - 1]['latitude'], points[points.length - 1]['longitude']),
-			map: map,
-			title: points[points.length - 1]['title'],
-			icon: finishIcon,
-			size: new google.maps.Size(1, 1.5),
-			zIndex: 2
-		});
+			finishMarker = new google.maps.Marker({
+				position: getLatLgn(points[points.length - 1]['latitude'], points[points.length - 1]['longitude']),
+				map: map,
+				title: points[points.length - 1]['title'],
+				icon: finishIcon,
+				size: new google.maps.Size(1, 1.5),
+				zIndex: 2
+			});
 
-		startMarker = new google.maps.Marker({
-			position: getLatLgn(points[0]['latitude'], points[0]['longitude']),
-			map: map,
-			title: points[0]['title'],
-			icon: finishIcon,
-			size: new google.maps.Size(1, 1.5),
-			zIndex: 2
-		});
+			startMarker = new google.maps.Marker({
+				position: getLatLgn(points[0]['latitude'], points[0]['longitude']),
+				map: map,
+				title: points[0]['title'],
+				icon: finishIcon,
+				size: new google.maps.Size(1, 1.5),
+				zIndex: 2
+			});
+		}
 	});
 
 	$.getJSON('api/v1/point/tracker', function(points) {

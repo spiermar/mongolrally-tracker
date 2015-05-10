@@ -14,7 +14,7 @@ class Point(ndb.Model):
     longitude = ndb.FloatProperty(required=True)
     resource = ndb.StringProperty()
     type = ndb.StringProperty(required=True)
-    date = ndb.DateTimeProperty()
+    timestamp = ndb.DateTimeProperty()
     pointid = ndb.IntegerProperty()
 
     @classmethod
@@ -27,13 +27,14 @@ class Point(ndb.Model):
     def to_dict(self):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
+        if self.timestamp is not None:
+            result['timestamp'] = self.timestamp.isoformat()
         return result
 
 
 class Tracker(ndb.Model):
     type = ndb.StringProperty(required=True)
     url = ndb.StringProperty(required=True)
-    poll_interval = ndb.IntegerProperty(required=True)
     date_added = ndb.DateTimeProperty(auto_now=True)
 
     def to_dict(self):

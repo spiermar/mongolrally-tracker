@@ -92,7 +92,7 @@ def load_route():
 @app.route('/api/v1/point/<type>', methods=['GET'])
 def list_point(type):
     points_dict = []
-    points = Point.query(Point.type == type).order(Point.date, Point.pointid).fetch()
+    points = Point.query(Point.type == type).order(Point.timestamp, Point.pointid).fetch()
     for point in points:
         points_dict.append(point.to_dict())
 
@@ -179,7 +179,6 @@ def save_tracker():
         data = json.loads(request.data)
         type = data['type']
         url = data['url']
-        poll_interval = int(data['poll_interval'])
         tracker = Tracker(
             type=type,
             url=url,
