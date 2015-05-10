@@ -32,12 +32,12 @@ class Point(ndb.Model):
         return result
 
 
-class Tracker(ndb.Model):
-    type = ndb.StringProperty(required=True)
-    url = ndb.StringProperty(required=True)
+class Config(ndb.Model):
+    name = ndb.StringProperty(required=True)
+    value = ndb.StringProperty(required=True)
     date_added = ndb.DateTimeProperty(auto_now=True)
 
     def to_dict(self):
-        result = super(Tracker,self).to_dict()
+        result = super(Config,self).to_dict()
         del result['date_added']
         return result

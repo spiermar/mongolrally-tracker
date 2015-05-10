@@ -21,7 +21,7 @@ import delorme
 
 from tracker import app
 
-from models import Point, Tracker
+from models import Point, Config
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -167,23 +167,26 @@ def delete_point(type, id):
     return Response(json.dumps({ 'status': 'ok' }), mimetype='application/json');
 
 
-@app.route('/api/v1/tracker/config', methods=['GET'])
-def get_tracker():
-    tracker = Tracker.query().order(-Tracker.date_added).get()
-    return Response(json.dumps(tracker.to_dict()), mimetype='application/json');
+@app.route('/api/v1/config/<name>', methods=['GET'])
+def get_config(name):
+    config = Config.query(Config.name == name).order(-Config.date_added).get()
+    if config is not None:
+        return Response(json.dumps(config.to_dict()), mimetype='application/json');
+    else:
+        return Response(json.dumps({ 'error': 'configuration was not found.' }), status=400, mimetype='application/json');
 
 
-@app.route('/api/v1/tracker/config', methods=['POST'])
-def save_tracker():
+@app.route('/api/v1/config', methods=['POST'])
+def save_config():
     try:
         data = json.loads(request.data)
-        type = data['type']
-        url = data['url']
-        tracker = Tracker(
-            type=type,
-            url=url
+        name = data['name']
+        value = data['value']
+        config = Config(
+            name=name,
+            value=value
         )
-        tracker.put()
+        config.put()
     except CapabilityDisabledError:
         logging.error(u'App Engine Datastore is currently in read-only mode.')
         abort(500)
@@ -195,18 +198,22 @@ def save_tracker():
         logging.error(e.args[0])
         abort(500)
 
-    return Response(json.dumps(tracker.to_dict()), mimetype='application/json');
+    return Response(json.dumps(config.to_dict()), mimetype='application/json');
 
 
-@app.route('/api/v1/tracker/load', methods=['GET'])
+@app.route('/api/v1/point/tracker/load', methods=['GET'])
 def load_tracker():
-    tracker = Tracker.query().order(-Tracker.date_added).get()
-    if tracker is None:
-        return Response(json.dumps({ 'error': 'tracker configuration was not found.' }), status=500, mimetype='application/json');
+    tracker_url = Config.query(Config.name == 'tracker_url').order(-Config.date_added).get()
+    if tracker_url is None:
+        return Response(json.dumps({ 'error': 'tracker_url configuration was not found.' }), status=500, mimetype='application/json');
 
-    if tracker.type == 'delorme':
-        return delorme.load_data(tracker.url)
-    elif tracker.type == 'spot':
+    tracker_type = Config.query(Config.name == 'tracker_type').order(-Config.date_added).get()
+    if tracker_type is None:
+        return Response(json.dumps({ 'error': 'tracker_type configuration was not found.' }), status=500, mimetype='application/json');
+
+    if tracker_type.value == 'delorme':
+        return delorme.load_data(tracker_url.value)
+    elif tracker_type.value == 'spot':
         return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
     else:
         return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');

@@ -10,6 +10,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Config
+  properties:
+  - name: name
+  - name: date_added
+    direction: desc
+
 - kind: Point
   properties:
   - name: type
