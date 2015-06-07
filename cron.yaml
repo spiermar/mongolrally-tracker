@@ -1,0 +1,4 @@
+cron:
+- description: tracker position check job
+  url: /api/v1/point/tracker/load
+  schedule: every 10 minutes
