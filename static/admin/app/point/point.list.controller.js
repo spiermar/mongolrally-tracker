@@ -31,9 +31,11 @@
       $http.post('/api/v1/point/route/load', { url: importUrl }).
         success(function(data, status, headers, config) {
           $log.info("Successfully imported route.");
+          $scope.openInfoModal("Success", "Successfully imported route.");
         }).
         error(function(data, status, headers, config) {
           $log.error("Error importing route.");
+          $scope.openInfoModal("Error", "Error importing route.");
         });
       $scope.points = Point.query({ type: $routeParams.type });
     }
@@ -42,7 +44,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/static/admin/app/modal/modal.delete.html',
+        templateUrl: '/static/admin/app/modal/modal-delete.html',
         controller: 'DeleteModalController',
         resolve: {
           point: function () {
@@ -56,6 +58,23 @@
         $scope.deletePoint(type, point);
       }, function () {
         $log.info('Delete Modal dismissed.');
+      });
+    };
+
+    $scope.openInfoModal = function (title, message) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal-info.html',
+        controller: 'InfoModalController',
+        resolve: {
+          title: function () {
+            return title;
+          },
+          message: function () {
+            return message;
+          }
+        }
       });
     };
   }

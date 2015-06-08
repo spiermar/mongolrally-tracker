@@ -53,16 +53,19 @@
       $http.post('/api/v1/config', { name: 'tracker_type', value: type }).
         success(function(data, status, headers, config) {
           $log.info("Tracker Type updated successfully.");
+          $http.post('/api/v1/config', { name: 'tracker_url', value: url }).
+            success(function(data, status, headers, config) {
+              $log.info("Tracker Url updated successfully.");
+              $scope.openInfoModal("Success", "Tracker information updated successfully.");
+            }).
+            error(function(data, status, headers, config) {
+              $log.error("Error updating Tracker Url.");
+              $scope.openInfoModal("Error", "Error updating Tracker Url.");
+            });
         }).
         error(function(data, status, headers, config) {
           $log.error("Error updating Tracker Type.");
-        });
-      $http.post('/api/v1/config', { name: 'tracker_url', value: url }).
-        success(function(data, status, headers, config) {
-          $log.info("Tracker Url updated successfully.");
-        }).
-        error(function(data, status, headers, config) {
-          $log.error("Error updating Tracker Url.");
+          $scope.openInfoModal("Error", "Error updating Tracker Type.");
         });
     }
 
@@ -70,7 +73,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/static/admin/app/modal/modal.delete.html',
+        templateUrl: '/static/admin/app/modal/modal-delete.html',
         controller: 'DeleteModalController',
         resolve: {
           point: function () {
@@ -84,6 +87,23 @@
         $scope.deletePoint('tracker', point);
       }, function () {
         $log.info('Delete Modal dismissed.');
+      });
+    };
+
+    $scope.openInfoModal = function (title, message) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal-info.html',
+        controller: 'InfoModalController',
+        resolve: {
+          title: function () {
+            return title;
+          },
+          message: function () {
+            return message;
+          }
+        }
       });
     };
   }
