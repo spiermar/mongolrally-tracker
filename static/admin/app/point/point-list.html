@@ -19,7 +19,8 @@
         <thead></thead>
         <tbody>
           <tr>
-            <td at-implicit at-attribute="title" at-title="Place" width="50%" style="vertical-align:middle"></td>
+            <td at-title="Time" width="15%" style="vertical-align:middle">{{formatTimestamp(item.timestamp)}}</td>
+            <td at-implicit at-attribute="title" at-title="Place" width="35%" style="vertical-align:middle"></td>
             <td at-implicit at-attribute="latitude" at-title="Latitude" width="20%" style="vertical-align:middle"></td>
             <td at-implicit at-attribute="longitude" at-title="Longitude" width="20%" style="vertical-align:middle"></td>
             <td width="5%" style="vertical-align:middle"><a href="#/point/{{item.type}}/{{item.id}}/edit" type="button" class="btn btn-default"><i class="fa fa-pencil"></i></a></td>

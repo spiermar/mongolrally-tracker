@@ -40,7 +40,7 @@
       $scope.points = Point.query({ type: $routeParams.type });
     }
 
-    $scope.openDeleteModal = function (type, point) {
+    $scope.openDeleteModal = function(type, point) {
 
       var modalInstance = $modal.open({
         animation: true,
@@ -61,7 +61,7 @@
       });
     };
 
-    $scope.openInfoModal = function (title, message) {
+    $scope.openInfoModal = function(title, message) {
 
       var modalInstance = $modal.open({
         animation: true,
@@ -77,6 +77,10 @@
         }
       });
     };
+
+    $scope.formatTimestamp = function (timestamp) {
+      return moment.unix(timestamp).format('MMM Do YYYY, hh:mm:ss');
+    }
   }
 
   ListPointCtrl.$inject = [

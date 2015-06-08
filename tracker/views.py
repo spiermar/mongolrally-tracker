@@ -11,6 +11,7 @@ For example the *say_hello* handler, handling the URL route '/hello/<username>',
 
 from flask import request, Response, abort
 from pykml import parser
+from datetime import datetime
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from google.appengine.ext.db import BadValueError
 import urllib2
@@ -112,6 +113,9 @@ def update_point(type, id):
     point.title = data['title']
     point.latitude = data['latitude']
     point.longitude = data['longitude']
+    point.desc = data['desc']
+    point.resource = data['resource']
+    point.timestamp = datetime.fromtimestamp(int(data['timestamp']))
     try:
         point.put()
     except CapabilityDisabledError:
@@ -131,10 +135,15 @@ def add_point(type):
         title = data['title']
         latitude = float(data['latitude'])
         longitude = float(data['longitude'])
+        desc = data['desc']
+        resource = data['resource']
+        timestamp = datetime.fromtimestamp(int(data['timestamp']))
         point = Point(
             title=title,
             latitude=latitude,
             longitude=longitude,
+            desc=desc,
+            resource=resource,
             type=type
         )
         point.put()

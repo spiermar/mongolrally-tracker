@@ -16,6 +16,7 @@ class Point(ndb.Model):
     type = ndb.StringProperty(required=True)
     timestamp = ndb.DateTimeProperty()
     pointid = ndb.IntegerProperty()
+    hide = ndb.BooleanProperty(default=False)
 
     @classmethod
     def delete_all(cls, delete_type):
@@ -28,7 +29,7 @@ class Point(ndb.Model):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
         if self.timestamp is not None:
-            result['timestamp'] = self.timestamp.isoformat()
+            result['timestamp'] = self.timestamp.strftime("%s")
         return result
 
 
