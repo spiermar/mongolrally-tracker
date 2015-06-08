@@ -11,7 +11,7 @@
   * @desc
   */
 
-  function ListPointCtrl($scope, $log, $http, $routeParams, Point) {
+  function ListPointCtrl($scope, $log, $http, $routeParams, $modal, Point) {
     $scope.points = Point.query({ type: $routeParams.type });
 
     $scope.type = $routeParams.type;
@@ -37,6 +37,27 @@
         });
       $scope.points = Point.query({ type: $routeParams.type });
     }
+
+    $scope.openDeleteModal = function (type, point) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal.delete.html',
+        controller: 'DeleteModalController',
+        resolve: {
+          point: function () {
+            return point;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $log.info('Deleting point: ' + point);
+        $scope.deletePoint(type, point);
+      }, function () {
+        $log.info('Delete Modal dismissed.');
+      });
+    };
   }
 
   ListPointCtrl.$inject = [
@@ -44,6 +65,7 @@
     '$log',
     '$http',
     '$routeParams',
+    '$modal',
     'Point'
   ];
 

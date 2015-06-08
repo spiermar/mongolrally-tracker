@@ -11,7 +11,7 @@
   * @desc
   */
 
-  function TrackerCtrl($scope, $log, $http, Point) {
+  function TrackerCtrl($scope, $log, $http, $modal, Point) {
     $scope.points = Point.query({ type: 'tracker' });
 
     $scope.type = 'tracker';
@@ -65,12 +65,34 @@
           $log.error("Error updating Tracker Url.");
         });
     }
+
+    $scope.openDeleteModal = function (point) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal.delete.html',
+        controller: 'DeleteModalController',
+        resolve: {
+          point: function () {
+            return point;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $log.info('Deleting point: ' + point);
+        $scope.deletePoint('tracker', point);
+      }, function () {
+        $log.info('Delete Modal dismissed.');
+      });
+    };
   }
 
   TrackerCtrl.$inject = [
     '$scope',
     '$log',
     '$http',
+    '$modal',
     'Point'
   ];
 

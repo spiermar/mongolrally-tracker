@@ -8,13 +8,17 @@
 
   angular.module('app.tracker', []);
 
+  angular.module('app.modal', []);
+
   angular.module('app', [
     'app.routes',
     'app.main',
     'app.point',
     'app.tracker',
+    'app.modal',
     'ngResource',
-    'angular-table'
+    'angular-table',
+    'ui.bootstrap'
   ]);
 
 })();
