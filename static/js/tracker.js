@@ -1,7 +1,7 @@
-var finishIcon = 'static/img/finishflag.png';	// start finish icon
-var blogIcon = 'static/img/blogmarker.png';	// blog icon
-var videoIcon = 'static/img/videomarker.png';	// video icon
-var photoIcon = 'static/img/imgmarker.png';	// image icon
+var finishIcon = 'static/img/finish.png';	// start finish icon
+var blogIcon = 'static/img/text.png';	// blog icon
+var videoIcon = 'static/img/video.png';	// video icon
+var photoIcon = 'static/img/photo.png';	// image icon
 var carIcon = 'static/img/car.png';	// car icon
 
 var blogPins = [];
