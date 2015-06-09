@@ -5,4 +5,4 @@ Werkzeug==0.10.1
 httplib2==0.9
 itsdangerous==0.24
 wsgiref==0.1.2
-pykml==0.1.0
+lxml>=2.2.8
