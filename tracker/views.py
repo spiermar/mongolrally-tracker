@@ -111,8 +111,8 @@ def update_point(type, id):
     point = Point.get_by_id(int(id))
     data = json.loads(request.data)
     point.title = data['title']
-    point.latitude = data['latitude']
-    point.longitude = data['longitude']
+    point.latitude = float(data['latitude'])
+    point.longitude = float(data['longitude'])
     point.desc = data['desc']
     point.resource = data['resource']
     point.timestamp = datetime.fromtimestamp(int(data['timestamp']))
@@ -144,6 +144,7 @@ def add_point(type):
             longitude=longitude,
             desc=desc,
             resource=resource,
+            timestamp=timestamp,
             type=type
         )
         point.put()
