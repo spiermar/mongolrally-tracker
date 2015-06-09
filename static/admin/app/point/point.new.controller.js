@@ -15,19 +15,19 @@
     $scope.point = new Point();
     $scope.point.type = $routeParams.type;
 
-    var mapMarker;
-
     $scope.savePoint = function() {
       $scope.point.$save(function() {
         $location.path( "/point/" + $scope.point.type );
       });
     };
 
+    var marker;
+
     function placeMarker(map, location) {
-      if (mapMarker) {
-        mapMarker.setPosition(location);
+      if (marker) {
+        marker.setPosition(location);
       } else {
-        mapMarker = new google.maps.Marker({
+        marker = new google.maps.Marker({
           id: 1,
           position: location,
           map: map
