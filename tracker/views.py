@@ -109,14 +109,28 @@ def get_point(type, id):
 @app.route('/api/v1/point/<type>/<id>', methods=['PUT'])
 def update_point(type, id):
     point = Point.get_by_id(int(id))
-    data = json.loads(request.data)
-    point.title = data['title']
-    point.latitude = float(data['latitude'])
-    point.longitude = float(data['longitude'])
-    point.desc = data['desc']
-    point.resource = data['resource']
-    point.timestamp = datetime.fromtimestamp(int(data['timestamp']))
+    
     try:
+        data = json.loads(request.data)
+
+        if 'title' in data:
+            point.title = data['title']
+
+        if 'latitude' in data:
+            point.latitude = float(data['latitude'])
+
+        if 'longitude' in data:
+            point.longitude = float(data['longitude'])
+
+        if 'desc' in data:
+            point.desc = data['desc']
+
+        if 'resource' in data:
+            point.resource = data['resource']
+
+        if 'timestamp' in data:
+            point.timestamp = datetime.fromtimestamp(int(data['timestamp']))
+
         point.put()
     except CapabilityDisabledError:
         logging.error(u'App Engine Datastore is currently in read-only mode.')
@@ -132,12 +146,33 @@ def update_point(type, id):
 def add_point(type):
     try:
         data = json.loads(request.data)
-        title = data['title']
-        latitude = float(data['latitude'])
-        longitude = float(data['longitude'])
-        desc = data['desc']
-        resource = data['resource']
-        timestamp = datetime.fromtimestamp(int(data['timestamp']))
+
+        title = None
+        if 'title' in data:
+            title = data['title']
+
+        if 'latitude' in data:
+            latitude = float(data['latitude'])
+        else:
+            abort(400)
+
+        if 'longitude' in data:
+            longitude = float(data['longitude'])
+        else:
+            abort(400)
+
+        desc = None
+        if 'desc' in data:
+            desc = data['desc']
+
+        resource = None
+        if 'resource' in data:
+            resource = data['resource']
+
+        timestamp = datetime.now()
+        if 'timestamp' in data:
+            timestamp = datetime.fromtimestamp(int(data['timestamp']))
+
         point = Point(
             title=title,
             latitude=latitude,
@@ -147,6 +182,7 @@ def add_point(type):
             timestamp=timestamp,
             type=type
         )
+
         point.put()
     except CapabilityDisabledError:
         logging.error(u'App Engine Datastore is currently in read-only mode.')
