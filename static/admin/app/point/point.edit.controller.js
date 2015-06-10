@@ -43,6 +43,7 @@
           position: new google.maps.LatLng(point.latitude, point.longitude),
           map: $scope.map.control.getGMap()
         });
+        $scope.point.timestamp = moment(point.timestamp);
       });
     };
 

@@ -29,7 +29,7 @@ class Point(ndb.Model):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
         if self.timestamp is not None:
-            result['timestamp'] = self.timestamp.strftime("%s")
+            result['timestamp'] = self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         return result
 
 

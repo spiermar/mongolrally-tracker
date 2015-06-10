@@ -109,7 +109,7 @@ def get_point(type, id):
 @app.route('/api/v1/point/<type>/<id>', methods=['PUT'])
 def update_point(type, id):
     point = Point.get_by_id(int(id))
-    
+
     try:
         data = json.loads(request.data)
 
@@ -129,7 +129,7 @@ def update_point(type, id):
             point.resource = data['resource']
 
         if 'timestamp' in data:
-            point.timestamp = datetime.fromtimestamp(int(data['timestamp']))
+            point.timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
         point.put()
     except CapabilityDisabledError:
@@ -171,7 +171,7 @@ def add_point(type):
 
         timestamp = datetime.now()
         if 'timestamp' in data:
-            timestamp = datetime.fromtimestamp(int(data['timestamp']))
+            timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
         point = Point(
             title=title,

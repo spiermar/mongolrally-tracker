@@ -21,6 +21,7 @@
     'app.map',
     'ngResource',
     'angular-table',
+    'ui.bootstrap.datetimepicker',
     'ui.bootstrap'
   ]);
 

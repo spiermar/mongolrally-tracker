@@ -14,6 +14,7 @@
   function NewPointCtrl($scope, $log, $location, $routeParams, uiGmapGoogleMapApi, Point) {
     $scope.point = new Point();
     $scope.point.type = $routeParams.type;
+    $scope.point.timestamp = moment();
 
     $scope.savePoint = function() {
       $scope.point.$save(function() {

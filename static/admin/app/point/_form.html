@@ -1,7 +1,16 @@
 <div class="form-group">
   <label for="timestamp" class="col-md-2 control-label">Time</label>
-  <div class="col-md-10">
-    <input type="text" ng-model="point.timestamp" class="form-control" id="timestamp" />
+  <div class="col-md-6">
+    <div class="dropdown">
+      <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown" data-target="#">
+        <div class="input-group"><input type="text" class="form-control" data-ng-model="point.timestamp">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+      </a>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <datetimepicker data-ng-model="point.timestamp" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }" id="timestamp"/>
+      </ul>
+    </div>
   </div>
 </div>
 

@@ -79,7 +79,7 @@
     };
 
     $scope.formatTimestamp = function (timestamp) {
-      return moment.unix(timestamp).format('MMM Do YYYY, hh:mm:ss');
+      return moment(timestamp).format('MMM Do YYYY, HH:mm:ss');
     }
   }
 
