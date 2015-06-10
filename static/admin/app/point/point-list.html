@@ -7,7 +7,10 @@
 <!-- /.row -->
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <a type="button" href="#/point/{{type}}/new" class="btn btn-primary pull-right">New</a>
+    <div class="btn-toolbar" role="toolbar">
+      <a type="button" href="#/point/{{type}}/new" class="btn btn-primary">New</a>
+      <button type="button" class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+    </div>
   </div>
   <!-- /.col-lg-12 -->
 </div>

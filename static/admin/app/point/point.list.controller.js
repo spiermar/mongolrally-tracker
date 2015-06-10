@@ -12,7 +12,6 @@
   */
 
   function ListPointCtrl($scope, $log, $http, $routeParams, $modal, Point) {
-    $scope.points = Point.query({ type: $routeParams.type });
 
     $scope.type = $routeParams.type;
 
@@ -21,10 +20,18 @@
       fillLastPage: true
     }
 
+    function updatePoints() {
+      $scope.points = Point.query({ type: $routeParams.type });
+    }
+
     $scope.deletePoint = function(type, id) {
       var point = Point.get({ type: type, id: id }, function() {
         point.$delete();
       });
+    }
+
+    $scope.refresh = function() {
+      updatePoints();
     }
 
     $scope.importRoute = function(importUrl) {
@@ -81,6 +88,8 @@
     $scope.formatTimestamp = function (timestamp) {
       return moment(timestamp).format('MMM Do YYYY, HH:mm:ss');
     }
+
+    updatePoints();
   }
 
   ListPointCtrl.$inject = [
