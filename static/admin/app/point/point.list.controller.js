@@ -86,7 +86,10 @@
     };
 
     $scope.formatTimestamp = function (timestamp) {
-      return moment(timestamp).format('MMM Do YYYY, HH:mm:ss');
+      if (timestamp) {
+        return moment(timestamp).format('MMM Do YYYY, HH:mm:ss');
+      }
+      return '';
     }
 
     updatePoints();

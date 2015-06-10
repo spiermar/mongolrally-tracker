@@ -6,6 +6,7 @@ App Engine datastore models
 """
 
 from google.appengine.ext import ndb
+import logging
 
 class Point(ndb.Model):
     title = ndb.StringProperty()
@@ -28,8 +29,13 @@ class Point(ndb.Model):
     def to_dict(self):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
-        if self.timestamp is not None:
-            result['timestamp'] = self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+        try:
+            if self.timestamp is not None:
+                result['timestamp'] = self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+        except BadValueError:
+            logging.error("Timestamp property doesn't exist")
+            result['timestamp'] = None
+
         return result
 
 
