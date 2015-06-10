@@ -14,7 +14,7 @@ class Point(ndb.Model):
     longitude = ndb.FloatProperty(required=True)
     resource = ndb.StringProperty()
     type = ndb.StringProperty(required=True)
-    timestamp = ndb.DateTimeProperty()
+    timestamp = ndb.DateTimeProperty(required=True)
     pointid = ndb.IntegerProperty()
     hide = ndb.BooleanProperty(default=False)
 

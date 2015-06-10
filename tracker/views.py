@@ -70,7 +70,8 @@ def load_route():
                 type = 'route',
                 latitude = float(coordinates[1]),
                 longitude = float(coordinates[0]),
-                pointid = pointid
+                pointid = pointid,
+                timestamp = datetime.now()
             )
         except TypeError:
             abort(500)
