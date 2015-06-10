@@ -11,7 +11,7 @@
   * @desc
   */
 
-  function NewPointCtrl($scope, $log, $location, $routeParams, uiGmapGoogleMapApi, Point) {
+  function NewPointCtrl($scope, $log, $location, $routeParams, $modal, uiGmapGoogleMapApi, Point) {
     $scope.point = new Point();
     $scope.point.type = $routeParams.type;
     $scope.point.timestamp = moment();
@@ -19,6 +19,26 @@
     $scope.savePoint = function() {
       $scope.point.$save(function() {
         $location.path( "/point/" + $scope.point.type );
+      }, function(error) {
+        $log.error(error);
+        $scope.openInfoModal("Error", error['status'] + ': ' + error['data']);
+      });
+    };
+
+    $scope.openInfoModal = function(title, message) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal-info.html',
+        controller: 'InfoModalController',
+        resolve: {
+          title: function () {
+            return title;
+          },
+          message: function () {
+            return message;
+          }
+        }
       });
     };
 
@@ -62,6 +82,7 @@
     '$log',
     '$location',
     '$routeParams',
+    '$modal',
     'uiGmapGoogleMapApi',
     'Point'
   ];

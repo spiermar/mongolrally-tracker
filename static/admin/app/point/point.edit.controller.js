@@ -11,11 +11,31 @@
   * @desc
   */
 
-  function EditPointCtrl($scope, $log, $location, $routeParams, uiGmapGoogleMapApi, uiGmapIsReady, Point) {
+  function EditPointCtrl($scope, $log, $location, $routeParams, $modal, uiGmapGoogleMapApi, uiGmapIsReady, Point) {
 
     $scope.updatePoint = function() {
       $scope.point.$update(function() {
         $location.path( "/point/" + $scope.point.type );
+      }, function(error) {
+        $log.error(error);
+        $scope.openInfoModal("Error", error['status'] + ': ' + error['data']);
+      });
+    };
+
+    $scope.openInfoModal = function(title, message) {
+
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: '/static/admin/app/modal/modal-info.html',
+        controller: 'InfoModalController',
+        resolve: {
+          title: function () {
+            return title;
+          },
+          message: function () {
+            return message;
+          }
+        }
       });
     };
 
@@ -43,7 +63,7 @@
           position: new google.maps.LatLng(point.latitude, point.longitude),
           map: $scope.map.control.getGMap()
         });
-        
+
         $scope.point.timestamp = moment();
         if (point.timestamp) {
           $scope.point.timestamp = moment(point.timestamp);
@@ -78,6 +98,7 @@
     '$log',
     '$location',
     '$routeParams',
+    '$modal',
     'uiGmapGoogleMapApi',
     'uiGmapIsReady',
     'Point'
