@@ -1,8 +1,8 @@
-var finishIcon = 'static/img/finish.png';	// start finish icon
-var blogIcon = 'static/img/text.png';	// blog icon
-var videoIcon = 'static/img/video.png';	// video icon
-var photoIcon = 'static/img/photo.png';	// image icon
-var carIcon = 'static/img/car.png';	// car icon
+var finishIcon = 'img/finish.png';	// start finish icon
+var blogIcon = 'img/text.png';	// blog icon
+var videoIcon = 'img/video.png';	// video icon
+var photoIcon = 'img/photo.png';	// image icon
+var carIcon = 'img/car.png';	// car icon
 
 var blogPins = [];
 var photoPins = [];
@@ -98,7 +98,7 @@ function LogoControl() {
 	var logoText = document.createElement('div');
 	logoText.style.paddingLeft = '4px';
 	logoText.style.paddingRight = '4px';
-	logoText.innerHTML = '<img src="static/img/logo_white.png" width="30%"/>';
+	logoText.innerHTML = '<img src="img/logo_white.png" width="30%"/>';
 	logoUI.appendChild(logoText);
 
 	google.maps.event.addDomListener(logoUI, 'click', function() {

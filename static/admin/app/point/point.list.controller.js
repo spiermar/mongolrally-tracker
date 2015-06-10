@@ -51,7 +51,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/static/admin/app/modal/modal-delete.html',
+        templateUrl: '/admin/app/modal/modal-delete.html',
         controller: 'DeleteModalController',
         resolve: {
           point: function () {
@@ -72,7 +72,7 @@
 
       var modalInstance = $modal.open({
         animation: true,
-        templateUrl: '/static/admin/app/modal/modal-info.html',
+        templateUrl: '/admin/app/modal/modal-info.html',
         controller: 'InfoModalController',
         resolve: {
           title: function () {

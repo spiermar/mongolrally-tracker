@@ -2,27 +2,53 @@
 views.py
 
 URL route handlers
-
-Note that any handler params must match the URL route params.
-For example the *say_hello* handler, handling the URL route '/hello/<username>',
-  must be passed *username* as the argument.
-
 """
 
-from flask import request, Response, abort
+from flask import request, Response, abort, render_template, session, redirect, url_for
+from flask.ext.login import LoginManager, login_required, logout_user, login_user, current_user
 from pykml import parser
 from datetime import datetime
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from google.appengine.ext.db import BadValueError
+from google.appengine.ext import ndb
 import urllib2
 import time
 import json
 import logging
 import delorme
 
+from models import Point, Config, User
+from forms import LoginForm
+
 from tracker import app
 
-from models import Point, Config
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+
+@app.route('/admin/')
+@login_required
+def admin():
+    return app.send_static_file('admin/index.html')
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    """Given *user_id*, return the associated User object.
+
+    :param unicode user_id: user_id (email) user to retrieve
+    """
+    return User.get_by_id(user_id)
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for("login"))
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -41,6 +67,7 @@ def warmup():
 	return ''
 
 @app.route('/api/v1/point/route/load', methods=['POST'])
+@login_required
 def load_route():
     try:
         data = json.loads(request.data)
@@ -108,6 +135,7 @@ def get_point(type, id):
 
 
 @app.route('/api/v1/point/<type>/<id>', methods=['PUT'])
+@login_required
 def update_point(type, id):
     point = Point.get_by_id(int(id))
 
@@ -144,6 +172,7 @@ def update_point(type, id):
 
 
 @app.route('/api/v1/point/<type>', methods=['POST'])
+@login_required
 def add_point(type):
     try:
         data = json.loads(request.data)
@@ -200,6 +229,7 @@ def add_point(type):
 
 
 @app.route('/api/v1/point/<type>/<id>', methods=['DELETE'])
+@login_required
 def delete_point(type, id):
     point = Point.get_by_id(int(id))
     try:
@@ -215,6 +245,7 @@ def delete_point(type, id):
 
 
 @app.route('/api/v1/config/<name>', methods=['GET'])
+@login_required
 def get_config(name):
     config = Config.query(Config.name == name).order(-Config.date_added).get()
     if config is not None:
@@ -224,6 +255,7 @@ def get_config(name):
 
 
 @app.route('/api/v1/config', methods=['POST'])
+@login_required
 def save_config():
     try:
         data = json.loads(request.data)
@@ -264,3 +296,54 @@ def load_tracker():
         return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
     else:
         return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
+
+
+@app.route('/api/v1/user', methods=['POST'])
+@login_required
+def add_user():
+    try:
+        data = json.loads(request.data)
+        email = data['email']
+        password = data['password']
+        user = User(
+            email=email,
+            password=password
+        )
+        user.key = ndb.Key(User, email)
+        user.put()
+    except CapabilityDisabledError:
+        logging.error(u'App Engine Datastore is currently in read-only mode.')
+        abort(500)
+    except BadValueError:
+        abort(400)
+    except TypeError:
+        abort(400)
+    except Exception as e:
+        logging.error(e.args[0])
+        abort(500)
+
+    return Response(json.dumps({ "status": "ok" }), mimetype='application/json');
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.get_by_id(form.email.data)
+        if user:
+            if user.password == form.password.data:
+                user.authenticated = True
+                user.put()
+                login_user(user, remember=True)
+                return redirect(url_for("admin"))
+    return render_template('login.html', form=form)
+
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    user = current_user
+    user.authenticated = False
+    user.put()
+    logout_user()
+    return redirect(url_for("login"))
