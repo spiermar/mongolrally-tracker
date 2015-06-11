@@ -4,7 +4,7 @@ views.py
 URL route handlers
 """
 
-from flask import request, Response, abort, render_template, session, redirect, url_for
+from flask import request, Response, abort, render_template, session, redirect, url_for, flash
 from flask.ext.login import LoginManager, login_required, logout_user, login_user, current_user
 from pykml import parser
 from datetime import datetime
@@ -331,6 +331,7 @@ def add_user():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    error = None
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_id(form.email.data)
@@ -339,9 +340,15 @@ def login():
             if user.password == hashed_password:
                 user.authenticated = True
                 user.put()
-                login_user(user, remember=True)
+                remember = form.remember.data
+                login_user(user, remember=remember)
                 return redirect(url_for("admin"))
-    return render_template('login.html', form=form)
+            else:
+                error = 'Invalid Credentials.'
+        else:
+            error = 'User Not Found.'
+
+    return render_template('login.html', form=form, error=error)
 
 
 @app.route("/logout", methods=["GET"])

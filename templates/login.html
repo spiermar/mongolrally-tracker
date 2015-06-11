@@ -41,6 +41,9 @@
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
+                        {% if error %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endif %}
                         <form role="form" method="POST" action="/login">
                             <fieldset>
                                 <div class="form-group">
