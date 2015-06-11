@@ -12,6 +12,11 @@ var routePath = null;
 var startMarker = null;
 var finishMarker = null;
 
+var routeControl;
+var blogControl;
+var photoControl;
+var videoControl;
+
 /* var trackerUrl = 'http://www.tripline.net/api/ge_kml.php/Mongol_Rally.kml?t_id=07102603702010059C3AC63443D845C0'; */
 
 // Implementing String.format
@@ -76,6 +81,8 @@ function MapControl(map, text, title, callback) {
 
 	controlDiv.index = 1;
 	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
+
+	return controlDiv
 }
 
 /**
@@ -220,27 +227,39 @@ function getLatLgn(lat,lgn) {
 */
 function loadPoints(map) {
 	$.getJSON('api/v1/point/video', function(points) {
-		$.each(points, function (index, point) {
-			if(!point['hide']) {
-				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
-			}
-		});
+		if(points.length > 0) {
+			$.each(points, function (index, point) {
+				if(!point['hide']) {
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
+				}
+			});
+		} else {
+			videoControl.style.display = 'none';
+		}
 	});
 
 	$.getJSON('api/v1/point/photo', function(points) {
-		$.each(points, function (index, point) {
-			if(!point['hide']) {
-				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
-			}
-		});
+		if(points.length > 0) {
+			$.each(points, function (index, point) {
+				if(!point['hide']) {
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
+				}
+			});
+		} else {
+			photoControl.style.display = 'none';
+		}
 	});
 
 	$.getJSON('api/v1/point/blog', function(points) {
-		$.each(points, function (index, point) {
-			if(!point['hide']) {
-				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
-			}
-		});
+		if(points.length > 0) {
+			$.each(points, function (index, point) {
+				if(!point['hide']) {
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
+				}
+			});
+		} else {
+			blogControl.style.display = 'none';
+		}
 	});
 
 	$.getJSON('api/v1/point/route', function(points) {
@@ -283,6 +302,8 @@ function loadPoints(map) {
 				size: new google.maps.Size(1, 1.5),
 				zIndex: 2
 			});
+		} else {
+			routeControl.style.display = 'none';
 		}
 	});
 
@@ -344,20 +365,19 @@ function initialize() {
 
 	var filterControl = new FilterLabelControl();
 
-	var routeControl = new MapControl(map, "Route", "Click to toggle route.", function () {
+	routeControl = new MapControl(map, "Route", "Click to toggle route.", function () {
 		toggleLayer(map, routePath);
 	});
 
-	var blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
+	blogControl = new MapControl(map, "Blog", "Click to toggle blog pins.", function () {
 		togglePins(blogPins);
 	});
 
-	var videoControlDiv = document.createElement('div');
-	var videoControl = new MapControl(map, "Video", "Click to toggle video pins.", function () {
+	videoControl = new MapControl(map, "Video", "Click to toggle video pins.", function () {
 		togglePins(videoPins);
 	});
 
-	var photoControl = new MapControl(map, "Photo", "Click to toggle photo pins.", function () {
+	photoControl = new MapControl(map, "Photo", "Click to toggle photo pins.", function () {
 		togglePins(photoPins);
 	});
 
