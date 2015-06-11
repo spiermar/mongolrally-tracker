@@ -221,28 +221,38 @@ function getLatLgn(lat,lgn) {
 function loadPoints(map) {
 	$.getJSON('api/v1/point/video', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
+			if(!point['hide']) {
+				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
+			}
 		});
 	});
 
 	$.getJSON('api/v1/point/photo', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
+			if(!point['hide']) {
+				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
+			}
 		});
 	});
 
 	$.getJSON('api/v1/point/blog', function(points) {
 		$.each(points, function (index, point) {
-			addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
+			if(!point['hide']) {
+				addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
+			}
 		});
 	});
 
 	$.getJSON('api/v1/point/route', function(points) {
 		if(points.length > 0) {
 			var routePoints = [];
+			var visiblePoints = []
 
 			$.each(points, function (index, point) {
-				routePoints.push(getLatLgn(point['latitude'], point['longitude']));
+				if(!point['hide']) {
+					routePoints.push(getLatLgn(point['latitude'], point['longitude']));
+					visiblePoints.push(point);
+				}
 			});
 
 			routePath = new google.maps.Polyline({
@@ -257,18 +267,18 @@ function loadPoints(map) {
 			});
 
 			finishMarker = new google.maps.Marker({
-				position: getLatLgn(points[points.length - 1]['latitude'], points[points.length - 1]['longitude']),
+				position: getLatLgn(visiblePoints[visiblePoints.length - 1]['latitude'], visiblePoints[visiblePoints.length - 1]['longitude']),
 				map: map,
-				title: points[points.length - 1]['title'],
+				title: visiblePoints[visiblePoints.length - 1]['title'],
 				icon: finishIcon,
 				size: new google.maps.Size(1, 1.5),
 				zIndex: 2
 			});
 
 			startMarker = new google.maps.Marker({
-				position: getLatLgn(points[0]['latitude'], points[0]['longitude']),
+				position: getLatLgn(visiblePoints[0]['latitude'], visiblePoints[0]['longitude']),
 				map: map,
-				title: points[0]['title'],
+				title: visiblePoints[0]['title'],
 				icon: finishIcon,
 				size: new google.maps.Size(1, 1.5),
 				zIndex: 2
@@ -283,10 +293,12 @@ function loadPoints(map) {
 		var en;
 
 		$.each(points, function (index, point) {
-			en = getLatLgn(point['latitude'], point['longitude']);
-			linePoints.push(en);
-			finalPoint = en;
-			time = point['dateTime'];
+			if(!point['hide']) {
+				en = getLatLgn(point['latitude'], point['longitude']);
+				linePoints.push(en);
+				finalPoint = en;
+				time = point['dateTime'];
+			}
 		});
 
 		var currentLocation = new google.maps.Marker({
