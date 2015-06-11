@@ -12,9 +12,11 @@
   */
 
   function TrackerCtrl($scope, $log, $http, $modal, Point) {
-    $scope.points = Point.query({ type: 'tracker' });
-
     $scope.type = 'tracker';
+
+    function updatePoints() {
+      $scope.points = Point.query({ type: 'tracker' });
+    }
 
     $http.get('/api/v1/config/tracker_type').
       success(function(data, status, headers, config) {
@@ -41,9 +43,26 @@
       fillLastPage: true
     }
 
+    $scope.refresh = function() {
+      updatePoints();
+    }
+
     $scope.deletePoint = function(type, id) {
       var point = Point.get({ type: type, id: id }, function() {
         point.$delete();
+      });
+    }
+
+    $scope.toggleHidePoint = function(type, id) {
+      var point = Point.get({ type: type, id: id }, function() {
+        point.hide = !point.hide;
+        point.$update(function() {
+          updatePoints();
+        }, function(error) {
+          $log.error(error);
+          $scope.openInfoModal("Error", error['status'] + ': ' + error['data']);
+          updatePoints();
+        });
       });
     }
 
@@ -110,6 +129,8 @@
     $scope.formatTimestamp = function (timestamp) {
       return moment(timestamp).format('MMM Do YYYY, hh:mm:ss');
     }
+
+    updatePoints();
   }
 
   TrackerCtrl.$inject = [

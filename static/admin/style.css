@@ -6,6 +6,10 @@ body, html {
     height: 400px;
 }
 
+.hidden-point {
+  color: #C0C0C0;
+}
+
 #wrapper {
     width: 100% !important;
     height: 100% !important;

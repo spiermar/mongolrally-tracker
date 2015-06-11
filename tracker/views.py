@@ -170,6 +170,9 @@ def update_point(type, id):
         if 'timestamp' in data:
             point.timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
+        if 'hide' in data:
+            point.hide = bool(data['hide'])
+
         point.put()
     except CapabilityDisabledError:
         logging.error(u'App Engine Datastore is currently in read-only mode.')
