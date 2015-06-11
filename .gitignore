@@ -2,3 +2,4 @@ lib/*/*
 lib/*.py
 *.pyc
 static/admin/bower_components
+app.config
