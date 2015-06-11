@@ -57,7 +57,8 @@ class User(ndb.Model):
     """
 
     email = ndb.StringProperty(required=True)
-    password = ndb.StringProperty()
+    password = ndb.StringProperty(required=True)
+    salt = ndb.StringProperty(required=True)
     authenticated = ndb.BooleanProperty(default=False)
 
     def is_active(self):

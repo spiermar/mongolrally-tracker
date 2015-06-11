@@ -16,6 +16,7 @@ import time
 import json
 import logging
 import delorme
+import hashlib, uuid
 
 from models import Point, Config, User
 from forms import LoginForm
@@ -305,9 +306,12 @@ def add_user():
         data = json.loads(request.data)
         email = data['email']
         password = data['password']
+        salt = uuid.uuid4().hex
+        hashed_password = hashlib.sha512(password + salt).hexdigest()
         user = User(
             email=email,
-            password=password
+            password=hashed_password,
+            salt=salt
         )
         user.key = ndb.Key(User, email)
         user.put()
@@ -331,7 +335,8 @@ def login():
     if form.validate_on_submit():
         user = User.get_by_id(form.email.data)
         if user:
-            if user.password == form.password.data:
+            hashed_password = hashlib.sha512(form.password.data + user.salt).hexdigest()
+            if user.password == hashed_password:
                 user.authenticated = True
                 user.put()
                 login_user(user, remember=True)
