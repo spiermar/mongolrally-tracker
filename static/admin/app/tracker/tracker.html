@@ -45,7 +45,7 @@
         <tbody>
           <tr>
             <td ng-class="{ 'hidden-point': item.hide }" at-title="Time" width="15%" style="vertical-align:middle">{{formatTimestamp(item.timestamp)}}</td>
-            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="title" at-title="Place" width="35%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="title" at-title="Title" width="35%" style="vertical-align:middle"></td>
             <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="latitude" at-title="Latitude" width="20%" style="vertical-align:middle"></td>
             <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="longitude" at-title="Longitude" width="20%" style="vertical-align:middle"></td>
             <td at-title="Hide" width="5%" style="vertical-align:middle"><button type="button" class="btn btn-default" ng-click="toggleHidePoint('tracker', item.id)"><i class="fa fa-eye-slash"></i></button></td>
