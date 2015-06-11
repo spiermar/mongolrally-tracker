@@ -22,10 +22,10 @@
         <thead></thead>
         <tbody>
           <tr>
-            <td at-title="Time" width="15%" style="vertical-align:middle">{{formatTimestamp(item.timestamp)}}</td>
-            <td at-implicit at-attribute="title" at-title="Place" width="35%" style="vertical-align:middle"></td>
-            <td at-implicit at-attribute="latitude" at-title="Latitude" width="20%" style="vertical-align:middle"></td>
-            <td at-implicit at-attribute="longitude" at-title="Longitude" width="20%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-title="Time" width="15%" style="vertical-align:middle">{{formatTimestamp(item.timestamp)}}</td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="title" at-title="Place" width="35%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="latitude" at-title="Latitude" width="20%" style="vertical-align:middle"></td>
+            <td ng-class="{ 'hidden-point': item.hide }" at-implicit at-attribute="longitude" at-title="Longitude" width="20%" style="vertical-align:middle"></td>
             <td at-title="Edit" width="5%" style="vertical-align:middle"><a href="#/point/{{item.type}}/{{item.id}}/edit" type="button" class="btn btn-default"><i class="fa fa-pencil"></i></a></td>
             <td at-title="Delete" width="5%" style="vertical-align:middle"><button type="button" class="btn btn-default" ng-click="openDeleteModal(item.type, item.id)"><i class="fa fa-trash-o"></i></button></td>
           </tr>
