@@ -20,6 +20,7 @@ import hashlib, uuid
 
 from models import Point, Config, User
 from forms import LoginForm
+from decorators import nocache
 
 from tracker import app
 
@@ -33,12 +34,14 @@ def root():
 
 @app.route('/admin/')
 @login_required
+@nocache
 def admin():
     return app.send_static_file('admin/index.html')
 
 
 @app.route('/admin/index.html')
 @login_required
+@nocache
 def admin_index():
     return app.send_static_file('admin/index.html')
 
