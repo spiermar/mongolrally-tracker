@@ -37,6 +37,12 @@ def admin():
     return app.send_static_file('admin/index.html')
 
 
+@app.route('/admin/index.html')
+@login_required
+def admin_index():
+    return app.send_static_file('admin/index.html')
+
+
 @login_manager.user_loader
 def user_loader(user_id):
     """Given *user_id*, return the associated User object.
