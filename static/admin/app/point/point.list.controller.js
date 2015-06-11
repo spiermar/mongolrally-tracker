@@ -14,6 +14,7 @@
   function ListPointCtrl($scope, $log, $http, $routeParams, $modal, Point) {
 
     $scope.type = $routeParams.type;
+    $scope.importing = false;
 
     $scope.config = {
       itemsPerPage: 10,
@@ -35,13 +36,16 @@
     }
 
     $scope.importRoute = function(importUrl) {
+      $scope.importing = true;
       $http.post('/api/v1/point/route/load', { url: importUrl }).
         success(function(data, status, headers, config) {
           $log.info("Successfully imported route.");
+          $scope.importing = false;
           $scope.openInfoModal("Success", "Successfully imported route.");
         }).
         error(function(data, status, headers, config) {
           $log.error("Error importing route.");
+          $scope.importing = false;
           $scope.openInfoModal("Error", "Error importing route.");
         });
       $scope.points = Point.query({ type: $routeParams.type });
