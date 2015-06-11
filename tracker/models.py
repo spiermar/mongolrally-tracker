@@ -29,12 +29,10 @@ class Point(ndb.Model):
     def to_dict(self):
         result = super(Point,self).to_dict()
         result['id'] = self.key.id()
-        try:
-            if self.timestamp is not None:
-                result['timestamp'] = self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.000Z")
-        except BadValueError:
-            logging.error("Timestamp property doesn't exist")
-            result['timestamp'] = None
+        timestamp = getattr(self, 'timestamp', None)
+        result['timestamp'] = None
+        if timestamp:
+            result['timestamp'] = self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
         return result
 

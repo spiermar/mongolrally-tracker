@@ -64,9 +64,10 @@
           map: $scope.map.control.getGMap()
         });
 
-        $scope.point.timestamp = moment();
         if (point.timestamp) {
-          $scope.point.timestamp = moment(point.timestamp);
+          point.timestamp = moment(point.timestamp);
+        } else {
+          point.timestamp = moment();
         }
       });
     };
