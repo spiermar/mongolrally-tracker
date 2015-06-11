@@ -10,6 +10,10 @@ body, html {
   color: #C0C0C0;
 }
 
+#hide {
+  margin-top: 12px !important;
+}
+
 #wrapper {
     width: 100% !important;
     height: 100% !important;
