@@ -88,7 +88,7 @@ def load_route():
 
     root = parser.fromstring(kml_str)
 
-    pointid = 0
+    pointid = 1000
     for placemark in root.Document.Folder.Placemark:
         coordinates = placemark.MultiGeometry.Point.coordinates.text.split(',')
         try:
