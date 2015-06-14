@@ -35,13 +35,14 @@ if (!String.prototype.format) {
 /**
 * The Pin holds all the information about a pin.
 */
-function Pin (marker, id, title, desc, resource)
+function Pin (marker, id, title, desc, resource, type)
 {
 	this.marker = marker;
 	this.id = id;
 	this.title = title;
 	this.desc = desc;
 	this.resource = resource;
+	this.type = type;
 	return this;
 }
 
@@ -159,7 +160,22 @@ function togglePins(pinList) {
 */
 function showPin(pin)
 {
-	var content = "<h2>{0}</h2><p>{1}</p><p>{2}</p>".format(pin.title, pin.resource, pin.desc);
+	var content = "<h3>{0}</h3>".format(pin.title);
+
+	if (pin.desc) {
+		content = content.concat("<p>{0}</p>".format(pin.desc));
+	}
+
+	if (pin.resource) {
+		if (pin.type === 'photo') {
+			content = content.concat('<a href="{0}" target="_blank"><img src="{0}" class="photo-pin" alt="{1}" width="400px"/></a>'.format(pin.resource, pin.title));
+		} else if (pin.type === 'video') {
+			content = content.concat('<iframe class="video-pin" width="560" height="315" src="{0}" frameborder="0" allowfullscreen></iframe>'.format(pin.resource));
+		} else if (pin.type === 'blog') {
+			content = content.concat('<a href="{0}" class="btn btn-default btn-yakin" target="_blank">View Post</a>'.format(pin.resource));
+		}
+	}
+
 	var infoWindow = new google.maps.InfoWindow({
 		content: content
 	});
@@ -170,7 +186,15 @@ function showPin(pin)
 /**
 * The addPin function adds a pin to a list.
 */
-function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
+function addPin(pos, id, title, desc, resource, type, zIndex, pinList) {
+	var icon = blogIcon
+
+	if (type === 'video') {
+		icon = videoIcon
+	} else if (type === 'photo') {
+		icon = photoIcon
+	}
+
 	var marker = new google.maps.Marker({
 				position: pos,
 				map: map,
@@ -180,7 +204,7 @@ function addPin(pos, id, title, desc, resource, icon, zIndex, pinList) {
 				zIndex: zIndex,
 				visible: true
 			});
-	var pin = new Pin(marker, id, title, desc, resource);
+	var pin = new Pin(marker, id, title, desc, resource, type);
 	pinList.push(pin);
 	new google.maps.event.addListener(pin.marker, 'click', function() {
 		showPin(pin);
@@ -230,7 +254,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], videoIcon, 3, videoPins);
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'video', 3, videoPins);
 				}
 			});
 		} else {
@@ -242,7 +266,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], photoIcon, 4, photoPins);
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'photo', 4, photoPins);
 				}
 			});
 		} else {
@@ -254,7 +278,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], blogIcon, 3, blogPins);
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'blog', 3, blogPins);
 				}
 			});
 		} else {

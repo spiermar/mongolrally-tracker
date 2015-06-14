@@ -51,8 +51,8 @@
           map: map
         });
       }
-      $scope.point.latitude = location.D;
-      $scope.point.longitude = location.k;
+      $scope.point.latitude = location.k;
+      $scope.point.longitude = location.D;
       $scope.$apply();
     }
 
