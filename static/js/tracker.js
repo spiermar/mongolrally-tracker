@@ -373,9 +373,11 @@ function loadPoints(map) {
 		}
 
 		var currentLocationPin = new Pin(currentLocation, 1000, "We are here!", currentLocationPinDesc, null, 'current');
-				new google.maps.event.addListener(currentLocation, 'click', function() {
-					showPin(currentLocationPin);
-				});
+		new google.maps.event.addListener(currentLocation, 'click', function() {
+			showPin(currentLocationPin);
+		});
+
+		/* showPin(currentLocationPin); */
 
 		var Path = new google.maps.Polyline({
 				path: linePoints,
