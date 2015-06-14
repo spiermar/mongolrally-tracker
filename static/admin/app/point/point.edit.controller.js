@@ -13,7 +13,34 @@
 
   function EditPointCtrl($scope, $log, $location, $routeParams, $modal, uiGmapGoogleMapApi, uiGmapIsReady, Point) {
 
+    function fixResourceUrl(url, isVideo) {
+      if (!/^(f|ht)tps?:\/\//i.test(url)) {
+        url = "http://" + url;
+      }
+
+      if (isVideo) {
+        var type = null;
+
+        url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+        if (RegExp.$3.indexOf('youtu') > -1) {
+          var type = 'youtube';
+        } else if (RegExp.$3.indexOf('vimeo') > -1) {
+          var type = 'vimeo';
+        }
+
+        if (type === 'youtube') {
+          url = "https://www.youtube.com/embed/" + RegExp.$6;
+        } else if (type === 'vimeo') {
+          url = "https://player.vimeo.com/video/" + RegExp.$6 + "?color=abc7f7&title=0&byline=0&portrait=0&badge=0";
+        }
+      }
+
+      return url;
+    }
+
     $scope.updatePoint = function() {
+      $scope.point.resource = fixResourceUrl($scope.point.resource, $scope.point.type === 'video');
       $scope.point.$update(function() {
         $location.path( "/point/" + $scope.point.type );
       }, function(error) {
