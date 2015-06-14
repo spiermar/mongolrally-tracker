@@ -16,7 +16,16 @@
     $scope.point.type = $routeParams.type;
     $scope.point.timestamp = moment();
 
+    function fixResourceUrl(url) {
+      $log.info("fixing url");
+      if (!/^(f|ht)tps?:\/\//i.test(url)) {
+        url = "http://" + url;
+      }
+      return url;
+    }
+
     $scope.savePoint = function() {
+      $scope.point.resource = fixResourceUrl($scope.point.resource);
       $scope.point.$save(function() {
         $location.path( "/point/" + $scope.point.type );
       }, function(error) {
