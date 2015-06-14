@@ -41,10 +41,11 @@
   <div class="col-md-8 col-md-offset-2">
     <hr>
     <h2>Import Route</h2>
+    <p>Routes can be created using the admin interface and also be be imported from any KML feed, like <a href="http://www.tripline.net/" target="_blank">Tripline</a>. Just enter the KML feed Url in the input below and click on the Import button. </p>
     <form role="form" ng-submit="importRoute(importUrl)">
       <div class="form-group">
         <label for="url">Import Url (KML)</label>
-        <input type="text" class="form-control" id="url" ng-model="importUrl" placeholder="Enter Url">
+        <input type="text" class="form-control" id="url" ng-model="importUrl" placeholder="Enter KML Feed Url">
       </div>
       <button type="submit" class="btn btn-default"><i ng-if="importing" class="fa fa-spinner fa-spin"></i> Import</button>
     </form>
