@@ -80,7 +80,7 @@ function MapControl(map, text, title, callback) {
 	// Setup the click event listeners
 	google.maps.event.addDomListener(controlUI, 'click', callback);
 
-	controlDiv.index = 1;
+	controlDiv.index = 0;
 	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
 
 	return controlDiv
@@ -93,6 +93,7 @@ function LogoControl() {
 	// Create Control Div
 	var controlDiv = document.createElement('div');
 	controlDiv.style.padding = '5px';
+	controlDiv.style.width = '20%';
 
 	// Set CSS for the control border.
 	var logoUI = document.createElement('div');
@@ -103,17 +104,23 @@ function LogoControl() {
 	controlDiv.appendChild(logoUI);
 
 	// Set CSS for the control interior.
-	var logoText = document.createElement('div');
-	logoText.style.paddingLeft = '4px';
-	logoText.style.paddingRight = '4px';
-	logoText.innerHTML = '<img src="img/logo_white.png" width="30%"/>';
-	logoUI.appendChild(logoText);
+	var logoDiv = document.createElement('div');
+	logoDiv.style.paddingLeft = '4px';
+	logoDiv.style.paddingRight = '4px';
 
-	google.maps.event.addDomListener(logoUI, 'click', function() {
+	var logoImg = document.createElement('img');
+	logoImg.setAttribute('src', 'img/logo_white.png');
+	logoImg.setAttribute('width', '100%');
+
+	logoDiv.appendChild(logoImg);
+
+	logoUI.appendChild(logoDiv);
+
+	google.maps.event.addDomListener(logoImg, 'click', function() {
 		window.open('http://yakinaround.com/', '_blank');
 	});
 
-	controlDiv.index = 1;
+	controlDiv.index = 0;
 	map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
 }
 
@@ -141,7 +148,7 @@ function FilterLabelControl() {
 	controlText.innerHTML = "Filters";
 	controlUI.appendChild(controlText);
 
-	controlDiv.index = 1;
+	controlDiv.index = 0;
 	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(controlDiv);
 }
 
@@ -177,7 +184,8 @@ function showPin(pin)
 	}
 
 	var infoWindow = new google.maps.InfoWindow({
-		content: content
+		content: content,
+		zIndex: 15
 	});
 
 	infoWindow.open(map, pin.marker)
@@ -254,7 +262,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'video', 3, videoPins);
+						addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'video', 10, videoPins);
 				}
 			});
 		} else {
@@ -266,7 +274,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'photo', 4, photoPins);
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'photo', 10, photoPins);
 				}
 			});
 		} else {
@@ -278,7 +286,7 @@ function loadPoints(map) {
 		if(points.length > 0) {
 			$.each(points, function (index, point) {
 				if(!point['hide']) {
-					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'blog', 3, blogPins);
+					addPin(getLatLgn(point['latitude'], point['longitude']), point['id'], point['title'], point['desc'], point['resource'], 'blog', 10, blogPins);
 				}
 			});
 		} else {
@@ -306,7 +314,7 @@ function loadPoints(map) {
 				strokeWeight: 5,
 				map: map,
 				geodesic: true,
-				zIndex: 2
+				zIndex: 1
 			});
 
 			finishMarker = new google.maps.Marker({
@@ -315,7 +323,7 @@ function loadPoints(map) {
 				title: visiblePoints[visiblePoints.length - 1]['title'],
 				icon: finishIcon,
 				size: new google.maps.Size(1, 1.5),
-				zIndex: 2
+				zIndex: 10
 			});
 
 			var finishMarkerPin = new Pin(finishMarker, 1001, visiblePoints[visiblePoints.length - 1]['title'], null, null, 'route');
@@ -329,7 +337,7 @@ function loadPoints(map) {
 				title: visiblePoints[0]['title'],
 				icon: finishIcon,
 				size: new google.maps.Size(1, 1.5),
-				zIndex: 2
+				zIndex: 10
 			});
 
 			var startMarkerPin = new Pin(startMarker, 1002, visiblePoints[0]['title'], null, null, 'route');
@@ -363,7 +371,7 @@ function loadPoints(map) {
 					icon: carIcon,
 					animation: google.maps.Animation.DROP,
 					size: new google.maps.Size(1, 1),
-					zIndex: 1,
+					zIndex: 10,
 				});
 
 		var currentLocationPinDesc = "At {0}<br>Out location was:<br>{1} Lat, {2} Lng".format(lastPoint.timestamp, lastPoint.latitude, lastPoint.longitude);
@@ -387,7 +395,7 @@ function loadPoints(map) {
 				strokeWeight: 5,
 				map: map,
 				geodesic: true,
-				zIndex: 1
+				zIndex: 5
 		});
 	});
 }
