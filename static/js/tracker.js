@@ -177,7 +177,7 @@ function showPin(pin)
 		if (pin.type === 'photo') {
 			content = content.concat('<a href="{0}" target="_blank"><img src="{0}" class="photo-pin" alt="{1}" width="400px"/></a>'.format(pin.resource, pin.title));
 		} else if (pin.type === 'video') {
-			content = content.concat('<iframe class="video-pin" width="560" height="315" src="{0}" frameborder="0" allowfullscreen></iframe>'.format(pin.resource));
+			content = content.concat('<iframe class="video-pin" width="560" height="315" src="{0}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'.format(pin.resource));
 		} else if (pin.type === 'blog') {
 			content = content.concat('<a href="{0}" class="btn btn-default btn-yakin" target="_blank">View Post</a>'.format(pin.resource));
 		}
