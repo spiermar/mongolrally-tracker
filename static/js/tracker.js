@@ -318,6 +318,11 @@ function loadPoints(map) {
 				zIndex: 2
 			});
 
+			var finishMarkerPin = new Pin(finishMarker, 1001, visiblePoints[visiblePoints.length - 1]['title'], null, null, 'route');
+			new google.maps.event.addListener(finishMarker, 'click', function() {
+				showPin(finishMarkerPin);
+			});
+
 			startMarker = new google.maps.Marker({
 				position: getLatLgn(visiblePoints[0]['latitude'], visiblePoints[0]['longitude']),
 				map: map,
@@ -325,6 +330,11 @@ function loadPoints(map) {
 				icon: finishIcon,
 				size: new google.maps.Size(1, 1.5),
 				zIndex: 2
+			});
+
+			var startMarkerPin = new Pin(startMarker, 1002, visiblePoints[0]['title'], null, null, 'route');
+			new google.maps.event.addListener(startMarker, 'click', function() {
+				showPin(startMarkerPin);
 			});
 		} else {
 			routeControl.style.display = 'none';
@@ -341,19 +351,30 @@ function loadPoints(map) {
 			if(!point['hide']) {
 				en = getLatLgn(point['latitude'], point['longitude']);
 				linePoints.push(en);
-				finalPoint = en;
-				time = point['dateTime'];
+				lastPosition = en;
+				lastPoint = point;
 			}
 		});
 
 		var currentLocation = new google.maps.Marker({
-					position: finalPoint,
+					position: lastPosition,
 					map: map,
-					title: "Current Location at: " + time,
+					title: "Current Location at: " + lastPoint.timestamp,
 					icon: carIcon,
 					animation: google.maps.Animation.DROP,
 					size: new google.maps.Size(1, 1),
 					zIndex: 1,
+				});
+
+		var currentLocationPinDesc = "At {0}<br>Out location was:<br>{1} Lat, {2} Lng".format(lastPoint.timestamp, lastPoint.latitude, lastPoint.longitude);
+
+		if (lastPoint.desc) {
+			currentLocationPinDesc = currentLocationPinDesc.concat("<br>{0}".format(lastPoint.desc));
+		}
+
+		var currentLocationPin = new Pin(currentLocation, 1000, "We are here!", currentLocationPinDesc, null, 'current');
+				new google.maps.event.addListener(currentLocation, 'click', function() {
+					showPin(currentLocationPin);
 				});
 
 		var Path = new google.maps.Polyline({
