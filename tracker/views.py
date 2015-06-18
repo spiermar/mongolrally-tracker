@@ -16,6 +16,7 @@ import time
 import json
 import logging
 import delorme
+import flickr
 import hashlib, uuid
 
 from models import Point, Config, User
@@ -371,3 +372,18 @@ def logout():
     user.put()
     logout_user()
     return redirect(url_for("login"))
+
+
+@app.route('/api/v1/point/flickr/load', methods=['GET'])
+def load_tracker():
+    user_id = Config.query(Config.name == 'flickr_user_id').order(-Config.date_added).get()
+
+    if user_id is None:
+        return Response(json.dumps({ 'error': 'flickr_user_id configuration was not found.' }), status=500, mimetype='application/json');
+
+    photoset_id = Config.query(Config.name == 'flickr_photoset_id').order(-Config.date_added).get()
+
+    if photoset_id is None:
+        return Response(json.dumps({ 'error': 'lickr_photoset_id configuration was not found.' }), status=500, mimetype='application/json');
+
+    return flickr.import_photos(user_id, photoset_id)
