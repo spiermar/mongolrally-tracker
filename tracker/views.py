@@ -400,4 +400,14 @@ def load_flickr():
     if photoset_id is None:
         return Response(json.dumps({ 'error': 'flickr_photoset_title configuration was not found.' }), status=500, mimetype='application/json');
 
-    return flickr.import_photos(user_id.value, photoset_id.value)
+    api_key = Config.query(Config.name == 'flickr_api_key').order(-Config.date_added).get()
+
+    if api_key is None:
+        return Response(json.dumps({ 'error': 'flickr_api_key configuration was not found.' }), status=500, mimetype='application/json');
+
+    api_secret = Config.query(Config.name == 'flickr_api_secret').order(-Config.date_added).get()
+
+    if api_secret is None:
+        return Response(json.dumps({ 'error': 'flickr_api_secret configuration was not found.' }), status=500, mimetype='application/json');
+
+    return flickr.import_photos(user_id.value, photoset_id.value, api_key.value, api_secret.value)

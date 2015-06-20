@@ -11,6 +11,11 @@
             controller: 'TrackerController',
             title: 'Yakin Around'
         })
+        .when('/flickr', {
+            templateUrl: '/admin/app/flickr/flickr.html',
+            controller: 'FlickrController',
+            title: 'Yakin Around'
+        })
         .when('/point/:type', {
             templateUrl: '/admin/app/point/point-list.html',
             controller: 'ListPointController',

@@ -6,14 +6,9 @@ import logging
 import json
 from models import Point
 
-api_key = u'4b0b1e20002e36421c9cba280506527e'
-api_secret = u'2bde6ed906e7a38d'
+def import_photos(username, photoset_title, api_key, api_secret):
 
-flickr_api.set_keys(api_key = api_key, api_secret = api_secret)
-
-def import_photos(username, photoset_title):
-
-    logging.warning(username)
+    flickr_api.set_keys(api_key = api_key, api_secret = api_secret)
 
     user = flickr_api.Person.findByUserName(username)
     photosets = user.getPhotosets()
