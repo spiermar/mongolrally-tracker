@@ -168,6 +168,12 @@ def update_point(type, id):
         if 'resource' in data:
             point.resource = data['resource']
 
+        if 'thumb' in data:
+            point.thumb = data['thumb']
+
+        if 'image' in data:
+            point.image = data['image']
+
         if 'timestamp' in data:
             point.timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
@@ -212,6 +218,14 @@ def add_point(type):
         resource = None
         if 'resource' in data:
             resource = data['resource']
+
+        thumb = None
+        if 'thumb' in data:
+            thumb = data['thumb']
+
+        image = None
+        if 'image' in data:
+            image = data['image']
 
         timestamp = datetime.now()
         if 'timestamp' in data:

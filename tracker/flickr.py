@@ -60,8 +60,9 @@ def import_photos(username, photoset_title):
                             type="photo",
                             timestamp=timestamp,
                             pointid=photo_id,
-                            # thumb=thumb,
-                            # url=photopage,
+                            thumb=thumb,
+                            image=image,
+                            # resource=photopage
                             resource=image
                         )
                 	    point.put()

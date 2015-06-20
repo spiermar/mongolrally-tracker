@@ -48,6 +48,20 @@
   </div>
 </div>
 
+<div class="form-group" ng-if="point.type == 'photo'">
+  <label for="thumb" class="col-md-2 control-label">Thumbnail Url</label>
+  <div class="col-md-10">
+    <input type="text" ng-model="point.thumb" class="form-control" id="thumb" />
+  </div>
+</div>
+
+<div class="form-group" ng-if="point.type == 'photo'">
+  <label for="image" class="col-md-2 control-label">Image Url</label>
+  <div class="col-md-10">
+    <input type="text" ng-model="point.image" class="form-control" id="image" />
+  </div>
+</div>
+
 <div class="form-group">
   <label for="resource" class="col-md-2 control-label">Resource Url</label>
   <div class="col-md-10">

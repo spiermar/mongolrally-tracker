@@ -18,6 +18,8 @@ class Point(ndb.Model):
     timestamp = ndb.DateTimeProperty(required=True)
     pointid = ndb.IntegerProperty()
     hide = ndb.BooleanProperty(default=False)
+    thumb = ndb.StringProperty()
+    image = ndb.StringProperty()
 
     @classmethod
     def delete_all(cls, delete_type):
