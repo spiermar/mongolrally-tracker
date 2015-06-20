@@ -9,4 +9,4 @@ lxml>=2.2.8
 flask-login==0.2.11
 wtforms>=2.0.0
 flask-wtf==0.11
-flickrapi>=2.0
+flickr-api==0.5

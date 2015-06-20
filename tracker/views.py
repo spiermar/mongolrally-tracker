@@ -375,15 +375,15 @@ def logout():
 
 
 @app.route('/api/v1/point/flickr/load', methods=['GET'])
-def load_tracker():
-    user_id = Config.query(Config.name == 'flickr_user_id').order(-Config.date_added).get()
+def load_flickr():
+    user_id = Config.query(Config.name == 'flickr_username').order(-Config.date_added).get()
 
     if user_id is None:
-        return Response(json.dumps({ 'error': 'flickr_user_id configuration was not found.' }), status=500, mimetype='application/json');
+        return Response(json.dumps({ 'error': 'flickr_username configuration was not found.' }), status=500, mimetype='application/json');
 
-    photoset_id = Config.query(Config.name == 'flickr_photoset_id').order(-Config.date_added).get()
+    photoset_id = Config.query(Config.name == 'flickr_photoset_title').order(-Config.date_added).get()
 
     if photoset_id is None:
-        return Response(json.dumps({ 'error': 'lickr_photoset_id configuration was not found.' }), status=500, mimetype='application/json');
+        return Response(json.dumps({ 'error': 'flickr_photoset_title configuration was not found.' }), status=500, mimetype='application/json');
 
-    return flickr.import_photos(user_id, photoset_id)
+    return flickr.import_photos(user_id.value, photoset_id.value)

@@ -11,8 +11,8 @@ import logging
 class Point(ndb.Model):
     title = ndb.StringProperty()
     desc = ndb.StringProperty()
-    latitude = ndb.FloatProperty(required=True)
-    longitude = ndb.FloatProperty(required=True)
+    latitude = ndb.FloatProperty()
+    longitude = ndb.FloatProperty()
     resource = ndb.StringProperty()
     type = ndb.StringProperty(required=True)
     timestamp = ndb.DateTimeProperty(required=True)
