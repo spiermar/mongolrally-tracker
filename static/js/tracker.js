@@ -47,7 +47,7 @@
 		prefix: 'fa',
     icon: 'flag-checkered',
 		extraClasses: 'tracker-icon',
-    markerColor: 'darkred'
+    markerColor: 'red'
   });
 
 	var blogIcon = L.AwesomeMarkers.icon({
@@ -102,6 +102,8 @@
 			icon = routeIcon;
 		} else if (type === 'tracker') {
 			icon = trackerIcon;
+		} else if (type === 'flag') {
+				icon = flagIcon;
 		}
 
 		var popup = new L.popup({ maxWidth: 500, maxHeight: 400 })
@@ -161,7 +163,8 @@
 				});
 
 				// Create array of lat,lon points.
-				var line_points = [];
+				var line_points = [],
+						route_points = [];
 
 				// Define polyline options
 				var polyline_options = {
@@ -170,13 +173,22 @@
 
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						route.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'route'));
+						route_points.push(point);
 						line_points.push([point['latitude'], point['longitude']]);
 					}
 				});
 
+				var start = route_points.shift();
+				var finish = route_points.pop();
+
+				$.each(route_points, function(index, point) {
+					route.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'route'));
+				})
+
 				routeLayer.addLayer(L.polyline(line_points, polyline_options));
 				routeLayer.addLayer(route);
+				routeLayer.addLayer(addMarker(parseFloat(start['latitude']), parseFloat(start['longitude']), start['title'], start['desc'], start['resource'], 'flag'));
+				routeLayer.addLayer(addMarker(parseFloat(finish['latitude']), parseFloat(finish['longitude']), finish['title'], finish['desc'], finish['resource'], 'flag'));
 			}
 		});
 
