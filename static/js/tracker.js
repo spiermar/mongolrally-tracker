@@ -279,7 +279,8 @@
     	zoom: 4,
     	layers: streets,
 			minZoom: 3,
-			maxZoom: 18
+			maxZoom: 18,
+			zoomControl: false
 		});
 
 		map.addLayer(photoLayer);
@@ -288,7 +289,9 @@
 		map.addLayer(routeLayer);
 		map.addLayer(trackerLayer);
 
-		L.control.layers(base, overlays, { collapsed: false }).addTo(map);
+		L.control.layers(base, overlays, { collapsed: false, position: 'topright' }).addTo(map);
+
+		new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
 
 		loadPoints();
 	}
