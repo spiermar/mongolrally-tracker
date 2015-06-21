@@ -40,7 +40,7 @@
 		prefix: 'fa',
     icon: 'car',
 		extraClasses: 'tracker-icon',
-    markerColor: 'cadetblue'
+    markerColor: 'blue'
   });
 
 	var flagIcon = L.AwesomeMarkers.icon({
