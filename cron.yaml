@@ -4,4 +4,4 @@ cron:
   schedule: every 10 minutes
 - description: flickr import job
   url: /api/v1/point/flickr/load
-  schedule: every 1 hour
+  schedule: every 60 minutes
