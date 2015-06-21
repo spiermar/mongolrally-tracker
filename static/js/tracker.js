@@ -95,7 +95,20 @@
 		$.getJSON('api/v1/point/route', function(points) {
 			if(points.length > 0) {
 
-				var route = new L.MarkerClusterGroup();
+				var route = new L.MarkerClusterGroup({
+    			iconCreateFunction: function(cluster) {
+						var c = ' marker-cluster-';
+						if (cluster.getChildCount() < 10) {
+							c += 'small';
+						} else if (cluster.getChildCount() < 100) {
+							c += 'medium';
+						} else {
+							c += 'large';
+						}
+
+        		return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', className: 'marker-cluster marker-cluster-red', iconSize: new L.Point(40, 40) });
+    			}
+				});
 
 				// Create array of lat,lon points.
 				var line_points = [];
@@ -121,7 +134,11 @@
 
 			var lastPoint;
 
-			var tracker = new L.MarkerClusterGroup();
+			var tracker = new L.MarkerClusterGroup({
+				iconCreateFunction: function(cluster) {
+					return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', className: 'marker-cluster marker-cluster-blue', iconSize: new L.Point(40, 40) });
+				}
+			});
 
 			// Create array of lat,lon points.
 			var line_points = [];
