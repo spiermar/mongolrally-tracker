@@ -104,6 +104,8 @@
 			icon = trackerIcon;
 		} else if (type === 'flag') {
 				icon = flagIcon;
+		} else if (type === 'car') {
+				icon = carIcon;
 		}
 
 		var popup = new L.popup({ maxWidth: 500, maxHeight: 400 })
@@ -183,7 +185,7 @@
 
 				$.each(route_points, function(index, point) {
 					route.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'route'));
-				})
+				});
 
 				routeLayer.addLayer(L.polyline(line_points, polyline_options));
 				routeLayer.addLayer(route);
@@ -193,32 +195,40 @@
 		});
 
 		$.getJSON('api/v1/point/tracker', function(points) {
+			if(points.length > 0) {
 
-			var lastPoint;
+				var tracker = new L.MarkerClusterGroup({
+					iconCreateFunction: function(cluster) {
+						return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', className: 'marker-cluster marker-cluster-blue', iconSize: new L.Point(40, 40) });
+					}
+				});
 
-			var tracker = new L.MarkerClusterGroup({
-				iconCreateFunction: function(cluster) {
-					return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', className: 'marker-cluster marker-cluster-blue', iconSize: new L.Point(40, 40) });
-				}
-			});
+				// Create array of lat,lon points.
+				var line_points = [],
+						tracker_points = [];
 
-			// Create array of lat,lon points.
-			var line_points = [];
+				// Define polyline options
+				var polyline_options = {
+						color: '#0000FF'
+				};
 
-			// Define polyline options
-			var polyline_options = {
-					color: '#0000FF'
-			};
+				$.each(points, function (index, point) {
+					if(!point['hide'] && point['latitude'] && point['longitude']) {
+						line_points.push([point['latitude'], point['longitude']]);
+						tracker_points.push(point);
+					}
+				});
 
-			$.each(points, function (index, point) {
-				if(!point['hide'] && point['latitude'] && point['longitude']) {
+				var current = tracker_points.pop();
+
+				$.each(tracker_points, function (index, point) {
 					tracker.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'tracker'));
-					line_points.push([point['latitude'], point['longitude']]);
-				}
-			});
+				});
 
-			trackerLayer.addLayer(L.polyline(line_points, polyline_options));
-			trackerLayer.addLayer(tracker);
+				trackerLayer.addLayer(L.polyline(line_points, polyline_options));
+				trackerLayer.addLayer(tracker);
+				routeLayer.addLayer(addMarker(parseFloat(current['latitude']), parseFloat(current['longitude']), current['title'], current['desc'], current['resource'], 'car'));
+			}
 		});
 	}
 
