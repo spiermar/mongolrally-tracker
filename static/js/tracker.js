@@ -234,7 +234,9 @@
 		var map = new L.map('map', {
     	center: [43.2358808,51.7155101],
     	zoom: 4,
-    	layers: streets
+    	layers: streets,
+			minZoom: 3,
+			maxZoom: 18
 		});
 
 		map.addLayer(photoLayer);
