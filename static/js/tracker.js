@@ -135,11 +135,34 @@
 
 		$.getJSON('api/v1/point/photo', function(points) {
 			if(points.length > 0) {
+
+				var photoCluster = L.photo.cluster().on('click', function (event) {
+					var photo = event.layer.photo,
+					template = '<img src="{url}"/></a><p>{caption}</p>';
+					event.layer.bindPopup(L.Util.template(template, photo), {
+						className: 'leaflet-popup-photo',
+						minWidth: 400
+					}).openPopup();
+				});
+
+				var photos = [];
+
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						photoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'photo'));
+						// photoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'photo'));
+						photos.push({
+							lat: point['latitude'],
+							lng: point['longitude'],
+							url: point['image'],
+							caption: point['title'],
+							thumbnail: point['thumb']
+						});
 					}
 				});
+
+				photoCluster.add(photos);
+
+				photoLayer.addLayer(photoCluster);
 			}
 		});
 
@@ -152,8 +175,6 @@
 				});
 			}
 		});
-
-
 
 		$.getJSON('api/v1/point/route', function(points) {
 			if(points.length > 0) {
