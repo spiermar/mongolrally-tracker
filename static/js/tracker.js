@@ -23,13 +23,59 @@
 			routeLayer = new L.layerGroup([]),
 			trackerLayer = new L.layerGroup([]);
 
+	var photoIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'camera',
+		extraClasses: 'tracker-icon',
+    markerColor: 'blue'
+  });
+
+	var videoIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'video-camera',
+    markerColor: 'blue'
+  });
+
+	var carIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'car',
+		extraClasses: 'tracker-icon',
+    markerColor: 'cadetblue'
+  });
+
+	var flagIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'flag-checkered',
+		extraClasses: 'tracker-icon',
+    markerColor: 'darkred'
+  });
+
+	var blogIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'rss',
+		extraClasses: 'tracker-icon',
+    markerColor: 'blue'
+  });
+
+	var routeIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'road',
+		extraClasses: 'tracker-icon',
+    markerColor: 'red'
+  });
+
+	var trackerIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'road',
+		extraClasses: 'tracker-icon',
+    markerColor: 'blue'
+  });
+
 	/**
 	* The addMarker function adds a marker to a list.
 	*/
 	function addMarker(lat, lng, title, desc, resource, type) {
 		var icon = defaultIcon;
-
-		var marker = new L.Marker(new L.LatLng(lat, lng), icon, true, false, true, title);
 
 		var content = "<h3>{0}</h3>".format(title);
 
@@ -37,18 +83,31 @@
 			content = content.concat("<p>{0}</p>".format(desc));
 		}
 
-		if (resource) {
-			if (type === 'photo') {
+		if (type === 'photo') {
+			if (resource) {
 				content = content.concat('<a href="{0}" target="_blank"><img src="{0}" class="photo-pin" alt="{1}" width="400px"/></a>'.format(resource, title));
-			} else if (type === 'video') {
+			}
+			icon = photoIcon;
+		} else if (type === 'video') {
+			if (resource) {
 				content = content.concat('<iframe class="video-pin" width="560" height="315" src="{0}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'.format(resource));
-			} else if (type === 'blog') {
+			}
+			icon = videoIcon;
+		} else if (type === 'blog') {
+			if (resource) {
 				content = content.concat('<a href="{0}" class="btn btn-default btn-yakin" target="_blank">View Post</a>'.format(resource));
 			}
+			icon = blogIcon;
+		} else if (type === 'route') {
+			icon = routeIcon;
+		} else if (type === 'tracker') {
+			icon = trackerIcon;
 		}
 
 		var popup = new L.popup({ maxWidth: 500, maxHeight: 400 })
 				.setContent(content);
+
+		var marker = new L.Marker(new L.LatLng(lat, lng), { icon: icon, title: title });
 
 		marker.bindPopup(popup);
 
@@ -97,15 +156,6 @@
 
 				var route = new L.MarkerClusterGroup({
     			iconCreateFunction: function(cluster) {
-						var c = ' marker-cluster-';
-						if (cluster.getChildCount() < 10) {
-							c += 'small';
-						} else if (cluster.getChildCount() < 100) {
-							c += 'medium';
-						} else {
-							c += 'large';
-						}
-
         		return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', className: 'marker-cluster marker-cluster-red', iconSize: new L.Point(40, 40) });
     			}
 				});
