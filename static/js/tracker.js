@@ -82,7 +82,7 @@
 	/**
 	* The addMarker function adds a marker to a list.
 	*/
-	function addMarker(lat, lng, title, desc, resource, type) {
+	function addMarker(lat, lng, timestamp,title, desc, resource, type) {
 		var icon = defaultIcon;
 
 		var content = ""
@@ -91,6 +91,10 @@
 			content = content.concat("<p><strong>{0}</strong></p>".format(title));
 		} else {
 			content = content.concat("<p>No Details for Point.<p>");
+		}
+
+		if (type === 'car' || type === 'tracker') {
+			content = content.concat("<p>{0}</p>".format(timestamp));
 		}
 
 		if (desc) {
@@ -146,7 +150,7 @@
 			if(points.length > 0) {
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						videoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'video'));
+						videoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'video'));
 					}
 				});
 			}
@@ -168,7 +172,7 @@
 
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						// photoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'photo'));
+						// photoLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'photo'));
 						photos.push({
 							lat: point['latitude'],
 							lng: point['longitude'],
@@ -190,7 +194,7 @@
 			if(points.length > 0) {
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						blogLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'blog'));
+						blogLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'blog'));
 					}
 				});
 			}
@@ -200,7 +204,7 @@
 			if(points.length > 0) {
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
-						charityLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'charity'));
+						charityLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'charity'));
 					}
 				});
 			}
@@ -235,13 +239,13 @@
 				var finish = route_points.pop();
 
 				$.each(route_points, function(index, point) {
-					route.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'route'));
+					route.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'route'));
 				});
 
 				routeLayer.addLayer(L.polyline(line_points, polyline_options));
 				routeLayer.addLayer(route);
-				routeLayer.addLayer(addMarker(parseFloat(start['latitude']), parseFloat(start['longitude']), start['title'], start['desc'], start['resource'], 'flag'));
-				routeLayer.addLayer(addMarker(parseFloat(finish['latitude']), parseFloat(finish['longitude']), finish['title'], finish['desc'], finish['resource'], 'flag'));
+				routeLayer.addLayer(addMarker(parseFloat(start['latitude']), parseFloat(start['longitude']), start['timestamp'], start['title'], start['desc'], start['resource'], 'flag'));
+				routeLayer.addLayer(addMarker(parseFloat(finish['latitude']), parseFloat(finish['longitude']), finish['timestamp'], finish['title'], finish['desc'], finish['resource'], 'flag'));
 			}
 		});
 
@@ -273,12 +277,12 @@
 				var current = tracker_points.pop();
 
 				$.each(tracker_points, function (index, point) {
-					tracker.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'tracker'));
+					tracker.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'tracker'));
 				});
 
 				trackerLayer.addLayer(L.polyline(line_points, polyline_options));
 				trackerLayer.addLayer(tracker);
-				routeLayer.addLayer(addMarker(parseFloat(current['latitude']), parseFloat(current['longitude']), current['title'], current['desc'], current['resource'], 'car'));
+				routeLayer.addLayer(addMarker(parseFloat(current['latitude']), parseFloat(current['longitude']), current['timestamp'], current['title'], current['desc'], current['resource'], 'car'));
 			}
 		});
 	}
