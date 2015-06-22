@@ -302,7 +302,7 @@
 
 				trackerLayer.addLayer(L.polyline(line_points, polyline_options));
 				trackerLayer.addLayer(tracker);
-				routeLayer.addLayer(addMarker(parseFloat(current['latitude']), parseFloat(current['longitude']), current['timestamp'], current['title'], current['desc'], current['resource'], 'car'));
+				trackerLayer.addLayer(addMarker(parseFloat(current['latitude']), parseFloat(current['longitude']), current['timestamp'], current['title'], current['desc'], current['resource'], 'car'));
 			}
 		});
 	}
