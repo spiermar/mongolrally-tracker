@@ -24,8 +24,8 @@ def import_photos(username, photoset_title, api_key, api_secret):
                     longitude = None
                     timestamp = None
                     title = photo.title
-                    thumb = None
-                    photo = None
+                    thumb_url = None
+                    photo_url = None
                     photopage = None
                     info = photo.getInfo()
                     taken = info[u'taken']
@@ -44,8 +44,8 @@ def import_photos(username, photoset_title, api_key, api_secret):
                         longitude = float(location[u'longitude'])
                         # title =  "%s, %s, %s" % (locality, region, country)
                     sizes = photo.getSizes()
-                    thumb = sizes[u'Square'][u'source']
-                    photo = sizes[u'Medium'][u'source']
+                    thumb_url = sizes[u'Square'][u'source']
+                    photo_url = sizes[u'Medium'][u'source']
 
                     try:
                 	    point = Point(
@@ -55,8 +55,8 @@ def import_photos(username, photoset_title, api_key, api_secret):
                             type="photo",
                             timestamp=timestamp,
                             pointid=photo_id,
-                            thumb=thumb,
-                            photo=photo,
+                            thumb=thumb_url,
+                            photo=photo_url,
                             resource=photopage
                         )
                 	    point.put()
