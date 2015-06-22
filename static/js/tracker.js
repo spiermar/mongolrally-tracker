@@ -85,7 +85,13 @@
 	function addMarker(lat, lng, title, desc, resource, type) {
 		var icon = defaultIcon;
 
-		var content = "<h3>{0}</h3>".format(title);
+		var content = ""
+
+		if (title) {
+			content = content.concat("<p><strong>{0}</strong></p>".format(title));
+		} else {
+			content = content.concat("<p>No Details for Point.<p>");
+		}
 
 		if (desc) {
 			content = content.concat("<p>{0}</p>".format(desc));
@@ -121,7 +127,7 @@
 			icon = charityIcon;
 		}
 
-		var popup = new L.popup({ maxWidth: 500, maxHeight: 400 })
+		var popup = new L.popup({ maxWidth: 580, maxHeight: 400 })
 				.setContent(content);
 
 		var marker = new L.Marker(new L.LatLng(lat, lng), { icon: icon, title: title });
@@ -151,7 +157,7 @@
 
 				var photoCluster = L.photo.cluster().on('click', function (event) {
 					var photo = event.layer.photo,
-					template = '<img src="{url}"/></a><p>{caption}</p>';
+					template = '<a href="{link}" target="_blank"><img src="{url}"/></a><p>{caption}</p>';
 					event.layer.bindPopup(L.Util.template(template, photo), {
 						className: 'leaflet-popup-photo',
 						minWidth: 400
@@ -168,6 +174,7 @@
 							lng: point['longitude'],
 							url: point['image'],
 							caption: point['title'],
+							link: point['resource'],
 							thumbnail: point['thumb']
 						});
 					}

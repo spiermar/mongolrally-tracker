@@ -57,8 +57,7 @@ def import_photos(username, photoset_title, api_key, api_secret):
                             pointid=photo_id,
                             thumb=thumb,
                             image=image,
-                            # resource=photopage
-                            resource=image
+                            resource=photopage
                         )
                 	    point.put()
                     except AttributeError:
