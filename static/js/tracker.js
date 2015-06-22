@@ -172,7 +172,7 @@
 						photos.push({
 							lat: point['latitude'],
 							lng: point['longitude'],
-							url: point['image'],
+							url: point['photo'],
 							caption: point['title'],
 							link: point['resource'],
 							thumbnail: point['thumb']

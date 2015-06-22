@@ -171,8 +171,8 @@ def update_point(type, id):
         if 'thumb' in data:
             point.thumb = data['thumb']
 
-        if 'image' in data:
-            point.image = data['image']
+        if 'photo' in data:
+            point.photo = data['photo']
 
         if 'timestamp' in data:
             point.timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
@@ -223,9 +223,9 @@ def add_point(type):
         if 'thumb' in data:
             thumb = data['thumb']
 
-        image = None
-        if 'image' in data:
-            image = data['image']
+        photo = None
+        if 'photo' in data:
+            photo = data['photo']
 
         timestamp = datetime.now()
         if 'timestamp' in data:
