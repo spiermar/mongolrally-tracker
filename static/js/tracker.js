@@ -22,7 +22,8 @@
 			blogLayer = new L.layerGroup([]),
 			routeLayer = new L.layerGroup([]),
 			trackerLayer = new L.layerGroup([]),
-			charityLayer = new L.layerGroup([]);
+			charityLayer = new L.layerGroup([]),
+			messageLayer = new L.layerGroup([]);
 
 	var photoIcon = L.AwesomeMarkers.icon({
 		prefix: 'fa',
@@ -79,6 +80,13 @@
     markerColor: 'green'
   });
 
+	var messageIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'comment',
+		extraClasses: 'tracker-icon',
+    markerColor: 'blue'
+  });
+
 	/**
 	* The addMarker function adds a marker to a list.
 	*/
@@ -129,6 +137,8 @@
 				content = content.concat('<a href="{0}" class="btn btn-default btn-yakin" target="_blank">See More</a>'.format(resource));
 			}
 			icon = charityIcon;
+		} else if (type === 'message') {
+			icon = messageIcon;
 		}
 
 		var popup = new L.popup({ maxWidth: 580, maxHeight: 400 })
@@ -205,6 +215,16 @@
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
 						charityLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'charity'));
+					}
+				});
+			}
+		});
+
+		$.getJSON('api/v1/point/message', function(points) {
+			if(points.length > 0) {
+				$.each(points, function (index, point) {
+					if(!point['hide'] && point['latitude'] && point['longitude']) {
+						messageLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['timestamp'], point['title'], point['desc'], point['resource'], 'message'));
 					}
 				});
 			}
@@ -305,8 +325,9 @@
     	"Photos": photoLayer,
     	"Videos": videoLayer,
 			"Blogs": blogLayer,
-			"Route": routeLayer,
-			"Charity": charityLayer
+			"Message": messageLayer,
+			"Charity": charityLayer,
+			"Route": routeLayer
 		};
 
 		var map = new L.map('map', {
@@ -324,6 +345,7 @@
 		map.addLayer(charityLayer);
 		map.addLayer(routeLayer);
 		map.addLayer(trackerLayer);
+		map.addLayer(messageLayer);
 
 		L.control.layers(base, overlays, { collapsed: false, position: 'topright' }).addTo(map);
 
