@@ -21,7 +21,8 @@
 			videoLayer = new L.layerGroup([]),
 			blogLayer = new L.layerGroup([]),
 			routeLayer = new L.layerGroup([]),
-			trackerLayer = new L.layerGroup([]);
+			trackerLayer = new L.layerGroup([]),
+			charityLayer = new L.layerGroup([]);
 
 	var photoIcon = L.AwesomeMarkers.icon({
 		prefix: 'fa',
@@ -71,6 +72,13 @@
     markerColor: 'blue'
   });
 
+	var charityIcon = L.AwesomeMarkers.icon({
+		prefix: 'fa',
+    icon: 'globe',
+		extraClasses: 'tracker-icon',
+    markerColor: 'green'
+  });
+
 	/**
 	* The addMarker function adds a marker to a list.
 	*/
@@ -103,9 +111,14 @@
 		} else if (type === 'tracker') {
 			icon = trackerIcon;
 		} else if (type === 'flag') {
-				icon = flagIcon;
+			icon = flagIcon;
 		} else if (type === 'car') {
-				icon = carIcon;
+			icon = carIcon;
+		} else if (type === 'charity') {
+			if (resource) {
+				content = content.concat('<a href="{0}" class="btn btn-default btn-yakin" target="_blank">See More</a>'.format(resource));
+			}
+			icon = charityIcon;
 		}
 
 		var popup = new L.popup({ maxWidth: 500, maxHeight: 400 })
@@ -171,6 +184,16 @@
 				$.each(points, function (index, point) {
 					if(!point['hide'] && point['latitude'] && point['longitude']) {
 						blogLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'blog'));
+					}
+				});
+			}
+		});
+
+		$.getJSON('api/v1/point/charity', function(points) {
+			if(points.length > 0) {
+				$.each(points, function (index, point) {
+					if(!point['hide'] && point['latitude'] && point['longitude']) {
+						charityLayer.addLayer(addMarker(parseFloat(point['latitude']), parseFloat(point['longitude']), point['title'], point['desc'], point['resource'], 'charity'));
 					}
 				});
 			}
@@ -271,7 +294,8 @@
     	"Photos": photoLayer,
     	"Videos": videoLayer,
 			"Blogs": blogLayer,
-			"Route": routeLayer
+			"Route": routeLayer,
+			"Charity": charityLayer
 		};
 
 		var map = new L.map('map', {
@@ -286,6 +310,7 @@
 		map.addLayer(photoLayer);
 		map.addLayer(videoLayer);
 		map.addLayer(blogLayer);
+		map.addLayer(charityLayer);
 		map.addLayer(routeLayer);
 		map.addLayer(trackerLayer);
 
