@@ -141,7 +141,7 @@
 			icon = messageIcon;
 		}
 
-		var popup = new L.popup({ maxWidth: 580, maxHeight: 400 })
+		var popup = new L.popup({ maxWidth: 600, maxHeight: 420 })
 				.setContent(content);
 
 		var marker = new L.Marker(new L.LatLng(lat, lng), { icon: icon, title: title });
