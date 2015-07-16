@@ -7,7 +7,7 @@
     'use strict';
 
   /**
-  * @name FlickrCtrl
+  * @name InstagramCtrl
   * @desc
   */
 
