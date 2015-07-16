@@ -171,7 +171,10 @@
 
 				var photoCluster = L.photo.cluster().on('click', function (event) {
 					var photo = event.layer.photo,
-					template = '<a href="{link}" target="_blank"><img src="{url}"/></a><p>{caption}</p>';
+							template = '<a href="{link}" target="_blank"><img src="{photo}"/></a><p>{caption}</p>';
+					if (photo.video && (!!document.createElement('video').canPlayType('video/mp4; codecs=avc1.42E01E,mp4a.40.2'))) {
+						template = '<video autoplay controls poster="{link}" width="400" height="400"><source src="{video}" type="video/mp4"/></video>';
+					};
 					event.layer.bindPopup(L.Util.template(template, photo), {
 						className: 'leaflet-popup-photo',
 						minWidth: 400
@@ -186,7 +189,8 @@
 						photos.push({
 							lat: point['latitude'],
 							lng: point['longitude'],
-							url: point['photo'],
+							photo: point['photo'],
+							video: point['video'],
 							caption: point['title'],
 							link: point['resource'],
 							thumbnail: point['thumb']

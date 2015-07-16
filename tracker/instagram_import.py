@@ -47,6 +47,7 @@ def import_media(access_token, client_secret):
 
             title = None
             desc = None
+            video = None
             if hasattr(item, 'caption'):
                 if item.caption is not None:
                     desc = item.caption.text
@@ -59,6 +60,8 @@ def import_media(access_token, client_secret):
             timestamp = item.created_time
             thumb = item.images.get('thumbnail').url
             photo = item.images.get('standard_resolution').url
+            if hasattr(item, 'videos'):
+                video = item.videos.get('standard_resolution').url
             resource = item.link
 
             try:
@@ -71,6 +74,7 @@ def import_media(access_token, client_secret):
                     pointid=pointid,
                     thumb=thumb,
                     photo=photo,
+                    video=video,
                     resource=resource,
                     desc=desc
                 )

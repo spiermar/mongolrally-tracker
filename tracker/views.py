@@ -175,6 +175,9 @@ def update_point(type, id):
         if 'photo' in data:
             point.photo = data['photo']
 
+        if 'video' in data:
+            point.video = data['video']
+
         if 'timestamp' in data:
             point.timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
 
@@ -228,6 +231,10 @@ def add_point(type):
         if 'photo' in data:
             photo = data['photo']
 
+        video = None
+        if 'video' in data:
+            video = data['video']
+
         timestamp = datetime.now()
         if 'timestamp' in data:
             timestamp = datetime.strptime(data['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
@@ -239,6 +246,9 @@ def add_point(type):
             desc=desc,
             resource=resource,
             timestamp=timestamp,
+            thumb=thumb,
+            photo=photo,
+            video=video,
             type=type
         )
 
