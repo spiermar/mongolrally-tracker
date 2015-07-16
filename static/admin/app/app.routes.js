@@ -16,6 +16,11 @@
             controller: 'FlickrController',
             title: 'Yakin Around'
         })
+        .when('/instagram', {
+            templateUrl: '/admin/app/instagram/instagram.html',
+            controller: 'InstagramController',
+            title: 'Yakin Around'
+        })
         .when('/point/:type', {
             templateUrl: '/admin/app/point/point-list.html',
             controller: 'ListPointController',

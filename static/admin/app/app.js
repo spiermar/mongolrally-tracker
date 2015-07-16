@@ -10,6 +10,8 @@
 
   angular.module('app.flickr', []);
 
+  angular.module('app.instagram', []);
+
   angular.module('app.modal', []);
 
   angular.module('app.map', ['uiGmapgoogle-maps']);
@@ -20,6 +22,7 @@
     'app.point',
     'app.tracker',
     'app.flickr',
+    'app.instagram',
     'app.modal',
     'app.map',
     'ngResource',
