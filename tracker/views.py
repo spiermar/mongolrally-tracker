@@ -16,7 +16,8 @@ import time
 import json
 import logging
 import delorme
-import flickr
+import flickr_import
+import instagram_import
 import hashlib, uuid
 
 from models import Point, Config, User
@@ -410,4 +411,19 @@ def load_flickr():
     if api_secret is None:
         return Response(json.dumps({ 'error': 'flickr_api_secret configuration was not found.' }), status=500, mimetype='application/json');
 
-    return flickr.import_photos(user_id.value, photoset_id.value, api_key.value, api_secret.value)
+    return flickr_import.import_photos(user_id.value, photoset_id.value, api_key.value, api_secret.value)
+
+
+@app.route('/api/v1/point/instagram/load', methods=['GET'])
+def load_instagram():
+    access_token = Config.query(Config.name == 'instagram_access_token').order(-Config.date_added).get()
+
+    if access_token is None:
+        return Response(json.dumps({ 'error': 'instagram_access_token configuration was not found.' }), status=500, mimetype='application/json');
+
+    client_secret = Config.query(Config.name == 'instagram_client_secret').order(-Config.date_added).get()
+
+    if client_secret is None:
+        return Response(json.dumps({ 'error': 'instagram_client_secret configuration was not found.' }), status=500, mimetype='application/json');
+
+    return instagram_import.import_media(access_token.value, client_secret.value)
