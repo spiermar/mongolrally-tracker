@@ -5,3 +5,6 @@ cron:
 - description: flickr import job
   url: /api/v1/point/flickr/load
   schedule: every 60 minutes
+- description: instagram import job
+  url: /api/v1/point/instagram/load
+  schedule: every 60 minutes
