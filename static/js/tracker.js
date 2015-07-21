@@ -318,7 +318,7 @@
 		L.mapbox.accessToken = 'pk.eyJ1IjoibXNwaWVyIiwiYSI6ImUwMmQ4OTBiNWNiMWIyZDE2MTU3MGZlYWI1MjdkMzkxIn0.3eCyZuMzgZfgDy-UznjdFA';
 
 		var streets = new L.mapbox.tileLayer('mapbox.streets');
-		var satellite = new L.mapbox.tileLayer('mapbox.satellite');
+		var satellite = new L.mapbox.tileLayer('mapbox.satellite', { maxZoom: 14 });
 
 		var base = {
     	"Streets": streets,
