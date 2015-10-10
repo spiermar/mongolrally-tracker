@@ -343,11 +343,11 @@
 			zoomControl: false
 		});
 
-		map.addLayer(photoLayer);
-		map.addLayer(videoLayer);
-		map.addLayer(blogLayer);
-		map.addLayer(charityLayer);
-		map.addLayer(routeLayer);
+		// map.addLayer(photoLayer);
+		// map.addLayer(videoLayer);
+		// map.addLayer(blogLayer);
+		// map.addLayer(charityLayer);
+		// map.addLayer(routeLayer);
 		map.addLayer(trackerLayer);
 		map.addLayer(messageLayer);
 
