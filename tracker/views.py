@@ -11,6 +11,7 @@ from datetime import datetime
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 from google.appengine.ext.db import BadValueError
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 import urllib2
 import time
 import json
@@ -132,10 +133,14 @@ def load_route():
 
 @app.route('/api/v1/point/<type>', methods=['GET'])
 def list_point(type):
-    points_dict = []
-    points = Point.query(Point.type == type).order(Point.timestamp, Point.pointid).fetch()
-    for point in points:
-        points_dict.append(point.to_dict())
+    points_dict = memcache.get('{}:points'.format(type))
+    if points_dict is None:
+        points_dict = []
+        points = Point.query(Point.type == type).order(Point.timestamp, Point.pointid).fetch()
+        for point in points:
+            points_dict.append(point.to_dict())
+        if not memcache.add('{}:points'.format(type), points_dict, 43200):
+            logging.error('Memcache set failed.')
 
     return Response(json.dumps(points_dict), mimetype='application/json');
 
