@@ -335,7 +335,11 @@ def load_tracker():
         return Response(json.dumps({ 'error': 'tracker_type configuration was not found.' }), status=500, mimetype='application/json');
 
     if tracker_type.value == 'delorme':
-        return delorme.load_data(tracker_url.value)
+        last_date = None
+        last_point = Point.query(Point.type == 'tracker').order(-Point.timestamp).get()
+        if last_point is not None:
+            last_date = last_point.to_dict().timestamp
+        return delorme.load_data(tracker_url.value, last_date)
     elif tracker_type.value == 'spot':
         return Response(json.dumps({ 'error': 'tracker not supported.' }), status=400, mimetype='application/json');
     else:

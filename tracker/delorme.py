@@ -6,7 +6,9 @@ import logging
 from datetime import datetime
 from models import Point
 
-def load_data(url):
+def load_data(url, last_date=None):
+    if last_date is not None:
+        url = url + last_date.strftime('?d1=%Y-%m-%dT%H:%MZ')
     obj = urllib2.urlopen(url)
     root = parser.parse(obj).getroot()
     for placemark in root.Document.Folder.Placemark:
@@ -19,7 +21,7 @@ def load_data(url):
             velocity = None
             course = None
             text = None
-            type='tracker'
+            type = 'tracker'
             for data in extended_data:
                 if data.attrib['name'] == 'Id':
                     pointid = int(data.value.text)
