@@ -1,7 +1,1 @@
 cron:
-- description: tracker position check job
-  url: /api/v1/point/tracker/load
-  schedule: every 10 minutes
-- description: instagram import job
-  url: /api/v1/point/instagram/load
-  schedule: every 60 minutes
